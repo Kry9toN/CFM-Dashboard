@@ -25,7 +25,10 @@ class ClashStatus {
                     URL(ClashConfig.baseURL).openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
                 conn.setRequestProperty("Authorization", "Bearer ${ClashConfig.secret}")
-                conn.inputStream.bufferedReader().readText() == "{\"hello\":\"clash\"}\n"
+                val matches = conn.inputStream.bufferedReader()
+                    .readText().contains("{\"hello\":\"clash")
+                matches
+
             } catch (ex: Exception) {
                 false
             }
