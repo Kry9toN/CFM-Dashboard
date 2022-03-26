@@ -5,23 +5,28 @@ import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import com.dashboard.kotlin.suihelper.SuiHelper
 import com.tencent.mmkv.MMKV
+import com.topjohnwu.superuser.Shell
 import java.io.DataInputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.concurrent.thread
 
 
 lateinit var GExternalCacheDir: String
 lateinit var KV: MMKV
 
 class MainActivity : AppCompatActivity() {
+    init {
+        Shell.setDefaultBuilder(
+            Shell.Builder.create()
+                .setFlags(Shell.FLAG_REDIRECT_STDERR)
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         this.window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         this.window.statusBarColor = ResourcesCompat.getColor(
             resources,
@@ -33,9 +38,6 @@ class MainActivity : AppCompatActivity() {
             android.R.color.transparent,
             applicationContext?.theme
         )
-
-        //sui
-        SuiHelper.init(packageName)
 
         //debug version print logs
         //if (BuildConfig.DEBUG) {

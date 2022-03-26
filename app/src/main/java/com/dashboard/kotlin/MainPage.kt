@@ -17,8 +17,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.dashboard.kotlin.clashhelper.ClashConfig
 import com.dashboard.kotlin.clashhelper.ClashStatus
+import com.dashboard.kotlin.clashhelper.ClashStatus.getStatus
 import com.dashboard.kotlin.clashhelper.CommandHelper
-import com.dashboard.kotlin.suihelper.SuiHelper
+import com.topjohnwu.superuser.Shell
 import kotlinx.android.synthetic.main.fragment_main_page.*
 import kotlinx.android.synthetic.main.fragment_main_page_buttons.*
 import kotlinx.android.synthetic.main.fragment_main_pages.*
@@ -44,8 +45,6 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
         return inflater.inflate(R.layout.fragment_main_page, container, false)
     }
 
-    private val clashStatusClass = ClashStatus()
-
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,7 +57,7 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
                 "-V" +
                 BuildConfig.VERSION_NAME.replace(Regex(".r.+$"),"")
 
-        if (!SuiHelper.checkPermission()) {
+        if (!Shell.cmd("su -c 'exit'").exec().isSuccess) {
             clash_status.setCardBackgroundColor(
                 ResourcesCompat.getColor(resources, R.color.error, context?.theme)
             )
@@ -74,7 +73,7 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
 
             lifecycleScope.launch {
                 while (true) {
-                    if (SuiHelper.checkPermission(request = false)) {
+                    if (Shell.cmd("su -c 'exit'").exec().isSuccess) {
                         restartApp()
                         break
                     }
@@ -87,16 +86,7 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
         }
 
         clash_status.setOnClickListener {
-            //setStatusCmdRunning()
-
-            GlobalScope.launch {
-                doAssestsShellFile(
-                    if (clashStatusClass.runStatus()) {
-                        "CFM_Stop.sh"
-                    } else {
-                        "CFM_Start.sh"
-                    })
-            }
+            ClashStatus.switch()
         }
 
         menu_ip_check.setOnClickListener {
@@ -149,9 +139,9 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
                 handler.post{
                     runCatching {
                         when {
-                            CommandHelper.isCmdRunning() ->
+                            ClashStatus.isCmdRunning ->
                                 setStatusCmdRunning()
-                            clashStatusClass.runStatus() ->
+                            ClashStatus.runStatus() ->
                                 setStatusRunning()
                             else ->
                                 setStatusStopped()
@@ -165,9 +155,9 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
     private fun setStatusScope() {
         runCatching { statusScope.cancel() }
         statusScope = lifecycleScope.launch(Dispatchers.IO) {
-            while (clashStatusClass.statusThreadFlag) {
+            while (ClashStatus.statusThreadFlag) {
                 runCatching {
-                    val jsonObject = JSONObject(clashStatusClass.statusRawText)
+                    val jsonObject = JSONObject(ClashStatus.statusRawText)
                     val upText: String = CommandHelper.autoUnitForSpeed(jsonObject.optString("up"))
                     val downText: String =
                         CommandHelper.autoUnitForSpeed(jsonObject.optString("down"))
@@ -191,16 +181,16 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
     override fun onPause() {
         super.onPause()
         Log.d("onPause", "MainPagePause")
-        clashStatusClass.stopGetStatus()
+        ClashStatus.stopGetStatus()
         timer.cancel()
     }
 
     override fun onResume() {
         super.onResume()
         Log.d("onResume", "MainPageResume")
-        clashStatusClass.getStatus()
+        ClashStatus.getStatus()
         setRunStatusTimer()
-        if (clashStatusClass.runStatus())
+        if (ClashStatus.runStatus())
             setStatusScope()
     }
 
@@ -210,22 +200,6 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
         intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent?.putExtra("REBOOT", "reboot")
         startActivity(intent)
-    }
-
-    private fun doAssestsShellFile(fileName: String): String {
-        context?.assets?.open(fileName)?.let { op ->
-            File(context?.externalCacheDir, fileName).let { fo ->
-                fo.outputStream().let { ip ->
-                    op.copyTo(ip)
-                }
-                SuiHelper.suCmd("mkdir -p ${ClashConfig.dataPath}/run &&" +
-                        "mv -f ${context?.externalCacheDir}/${fileName} ${ClashConfig.dataPath}/run/ass.sh")
-                val res = SuiHelper.suCmd("sh '${ClashConfig.dataPath}/run/ass.sh' ${ClashConfig.scriptsPath} 2>&1")
-                fo.delete()
-                return res
-            }
-        }
-        return ""
     }
 
     private fun setStatusRunning(){
@@ -242,7 +216,7 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
 
         resources_status_text.visibility = View.VISIBLE
 
-        clashStatusClass.getStatus()
+        ClashStatus.getStatus()
 
         setStatusScope()
     }
@@ -267,7 +241,7 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
         )
         clash_status_text.text = getString(R.string.clash_charging)
         resources_status_text.visibility = View.INVISIBLE
-        clashStatusClass.stopGetStatus()
+        ClashStatus.stopGetStatus()
     }
 
     private fun setStatusStopped(){
@@ -286,25 +260,23 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
         )
         clash_status_text.text = getString(R.string.clash_disable)
         resources_status_text.visibility = View.INVISIBLE
-        clashStatusClass.stopGetStatus()
+        ClashStatus.stopGetStatus()
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean =
         when(item.itemId){
             R.id.menu_update_geox -> {
                 when{
-                    SuiHelper.checkPermission().not() ->
+                    !Shell.cmd("su -c 'exit'").exec().isSuccess ->
                         Toast.makeText(context, "莫得权限呢", Toast.LENGTH_SHORT).show()
-                    CommandHelper.isCmdRunning() ->
+                    ClashStatus.isCmdRunning ->
                         Toast.makeText(context, "现在不可以哦", Toast.LENGTH_SHORT).show()
-                    else -> GlobalScope.launch {
-                            doAssestsShellFile("CFM_Update_GeoX.sh")
-                        }
+                    else -> ClashStatus.updateGeox()
                 }
                 true
             }
             R.id.menu_update_config -> {
-                if (clashStatusClass.runStatus())
+                if (ClashStatus.runStatus())
                     ClashConfig.updateConfig{
                         Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                     }

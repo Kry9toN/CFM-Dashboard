@@ -1,9 +1,9 @@
 package com.dashboard.kotlin.clashhelper
 
 import android.util.Log
+import com.topjohnwu.superuser.Shell
 import java.net.HttpURLConnection
 import java.net.URL
-import com.dashboard.kotlin.suihelper.SuiHelper
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -13,7 +13,7 @@ import java.math.RoundingMode
 import kotlin.concurrent.thread
 
 @DelicateCoroutinesApi
-class ClashStatus {
+object ClashStatus {
     var statusThreadFlag: Boolean = true
         private set
     var statusRawText: String = "{\"up\":\"0\",\"down\":\"0\",\"RES\":\"0\",\"CPU\":\"0%\"}"
@@ -54,7 +54,7 @@ class ClashStatus {
                     while (statusThreadFlag) {
                         var cpuTotal = 0L
                         var clashCpuTotal = 0L
-                        SuiHelper.suCmd("cat /proc/stat | grep \"cpu \"")
+                        Shell.cmd("cat /proc/stat | grep \"cpu \"").exec().out.first()
                             .replace("\n","")
                             .replace("cpu ","")
                             .split(Regex(" +")).forEach{ str ->
@@ -62,8 +62,7 @@ class ClashStatus {
                                     cpuTotal += str.toLong()
                                 }
                             }
-                        SuiHelper.suCmd(
-                            "cat /proc/`cat ${ClashConfig.pidPath}`/stat")
+                        Shell.cmd("cat /proc/`cat ${ClashConfig.pidPath}`/stat").exec().out.first()
                             .split(Regex(" +"))
                             .filterIndexed { index, _ -> index in 13..16 }
                             .forEach{ str ->
@@ -81,10 +80,9 @@ class ClashStatus {
                         lastClashCpuTotal = clashCpuTotal
                         lastCpuTotal = cpuTotal
 
-                        val res = SuiHelper.suCmd(
-                            "cat /proc/`cat ${ClashConfig.pidPath}`/status | " +
-                                    "grep VmRSS | " +
-                                    "awk '{print \$2}'")
+                        val res = Shell.cmd(
+                            "cat /proc/`cat ${ClashConfig.pidPath}`/status | grep VmRSS | awk '{print \$2}'"
+                        ).exec().out.first()
 
                         statusRawText = it.bufferedReader().readLine()
                             .replace("}", ",\"RES\":\"$res\",\"CPU\":\"$cpuAVG%\"}")
@@ -100,5 +98,46 @@ class ClashStatus {
 
     fun stopGetStatus() {
         statusThreadFlag = false
+    }
+
+    var isCmdRunning = false
+        private set
+
+    fun start(){
+        if (isCmdRunning) return
+        isCmdRunning = true
+        Shell.cmd(
+            "${ClashConfig.scriptsPath}/clash.service -s",
+            "${ClashConfig.scriptsPath}/clash.tproxy -s"
+        ).submit{
+            isCmdRunning = false
+        }
+    }
+
+    fun stop(){
+        if (isCmdRunning) return
+        isCmdRunning = true
+        Shell.cmd(
+            "${ClashConfig.scriptsPath}/clash.service -k",
+            "${ClashConfig.scriptsPath}/clash.tproxy -k"
+        ).submit{
+            isCmdRunning = false
+        }
+    }
+
+    fun switch(){
+        if (isCmdRunning) return
+        if (runStatus())
+            stop()
+        else
+            start()
+    }
+
+    fun updateGeox(){
+        if (isCmdRunning) return
+        isCmdRunning = true
+        Shell.cmd("${ClashConfig.scriptsPath}/clash.tool -u").submit{
+            isCmdRunning = false
+        }
     }
 }

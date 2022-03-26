@@ -2,7 +2,7 @@ package com.dashboard.kotlin.clashhelper
 
 import android.util.Log
 import com.dashboard.kotlin.GExternalCacheDir
-import com.dashboard.kotlin.suihelper.SuiHelper
+import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.io.File
@@ -18,13 +18,13 @@ object ClashConfig {
     init {
         System.loadLibrary("yaml-reader")
         setTemplate()
-        SuiHelper.suCmd(
-            "mkdir -p $dataPath/run &&" +
-                    "cp -f $dataPath/clash.config $dataPath/run/c.cfg &&" +
-                    " echo '\necho \"\${Clash_bin_path};\${Clash_scripts_dir};\"'" +
-                    " >> $dataPath/run/c.cfg")
-        paths = SuiHelper.suCmd("$dataPath/run/c.cfg").split(';')
-        SuiHelper.suCmd("rm -f $dataPath/run/c.cfg")
+        paths = Shell.cmd(
+            "mkdir -p $dataPath/run",
+             "cp -f $dataPath/clash.config $dataPath/run/c.cfg",
+            " echo '\necho \"\${Clash_bin_path};\${Clash_scripts_dir};\"' >> $dataPath/run/c.cfg",
+            "$dataPath/run/c.cfg"
+        ).exec().out.last().split(';')
+        Shell.cmd("rm -f $dataPath/run/c.cfg").submit()
     }
 
     val dataPath
@@ -75,21 +75,21 @@ object ClashConfig {
         runCatching {
             mergeConfig("config_output.yaml")
 
-            if (SuiHelper.suCmd(
-                    "diff '$GExternalCacheDir/config_output.yaml' '$mergedConfigPath' > /dev/null" +
-                            "&& echo true") == "true") {
+            if (Shell
+                    .cmd("diff '$GExternalCacheDir/config_output.yaml' '$mergedConfigPath' > /dev/null")
+                    .exec()
+                    .isSuccess
+            ) {
                 callBack("配置莫得变化")
                 return
             } else
-                SuiHelper.suCmd(
+                Shell.cmd(
                     "mv '$GExternalCacheDir/config_output.yaml' '$mergedConfigPath'")
         }.onFailure {
             callBack("合并失败啦")
             return
         }
-        if (SuiHelper.suCmd(
-                "$corePath -d $dataPath -f $mergedConfigPath -t > /dev/null " +
-                        "&& echo true") == "true")
+        if (Shell.cmd("$corePath -d $dataPath -f $mergedConfigPath -t > /dev/null").exec().isSuccess)
             updateConfigNet(mergedConfigPath, callBack)
         else
             callBack("配置文件有误唉")
@@ -141,9 +141,9 @@ object ClashConfig {
     private fun mergeConfig(outputFileName: String) {
         //copyFile(clashDataPath, "config.yaml")
         copyFile(dataPath, "template")
-        SuiHelper.suCmd(
-            "sed -n -E '/^proxies:.*\$/,\$p' $configPath" +
-                    " > $GExternalCacheDir/config.yaml")
+        Shell.cmd(
+            "sed -n -E '/^proxies:.*\$/,\$p' $configPath> $GExternalCacheDir/config.yaml"
+        ).exec()
         mergeFile(
             "$GExternalCacheDir/template",
             "$GExternalCacheDir/config.yaml",
@@ -167,13 +167,13 @@ object ClashConfig {
     private fun setFileNR(dirPath: String, fileName: String, func: (file: String) -> Unit) {
         copyFile(dirPath, fileName)
         func("$GExternalCacheDir/${fileName}")
-        SuiHelper.suCmd("cp '$GExternalCacheDir/${fileName}' '${dirPath}/${fileName}'")
+        Shell.cmd("cp '$GExternalCacheDir/${fileName}' '${dirPath}/${fileName}'").exec()
         deleteFile(GExternalCacheDir, fileName)
     }
 
     private fun copyFile(dirPath: String, fileName: String) {
-        SuiHelper.suCmd("cp '${dirPath}/${fileName}' '$GExternalCacheDir/${fileName}'")
-        SuiHelper.suCmd("chmod +rw '$GExternalCacheDir/${fileName}'")
+        Shell.cmd("cp '${dirPath}/${fileName}' '$GExternalCacheDir/${fileName}'").exec()
+        Shell.cmd("chmod +rw '$GExternalCacheDir/${fileName}'").exec()
         return
     }
 
