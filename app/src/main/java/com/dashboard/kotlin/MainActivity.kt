@@ -6,6 +6,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.tencent.mmkv.MMKV
+import com.topjohnwu.superuser.BusyBoxInstaller
 import com.topjohnwu.superuser.Shell
 import java.io.DataInputStream
 import java.io.File
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     init {
         Shell.setDefaultBuilder(
             Shell.Builder.create()
+                .setInitializers(BusyBoxInstaller::class.java)
                 .setFlags(Shell.FLAG_REDIRECT_STDERR)
         )
     }

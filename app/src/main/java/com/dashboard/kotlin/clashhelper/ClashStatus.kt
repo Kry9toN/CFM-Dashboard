@@ -28,7 +28,6 @@ object ClashStatus {
                 val matches = conn.inputStream.bufferedReader()
                     .readText().contains("{\"hello\":\"clash")
                 matches
-
             } catch (ex: Exception) {
                 false
             }
@@ -107,8 +106,7 @@ object ClashStatus {
         if (isCmdRunning) return
         isCmdRunning = true
         Shell.cmd(
-            "${ClashConfig.scriptsPath}/clash.service -s",
-            "${ClashConfig.scriptsPath}/clash.tproxy -s"
+            "${ClashConfig.scriptsPath}/clash.service -s && ${ClashConfig.scriptsPath}/clash.tproxy -s"
         ).submit{
             isCmdRunning = false
         }

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.dashboard.kotlin.clashhelper.ClashConfig
 import com.dashboard.kotlin.clashhelper.ClashStatus
+import com.topjohnwu.superuser.BusyBoxInstaller
 import com.topjohnwu.superuser.Shell
 import kotlinx.android.synthetic.main.fragment_log.*
 import kotlinx.coroutines.*
@@ -18,7 +19,9 @@ import kotlinx.coroutines.*
 @DelicateCoroutinesApi
 class LogPage : Fragment() {
     private val job = Shell.Builder.create()
-        .build().newJob().add("cat ${ClashConfig.logPath}")
+        .setInitializers(BusyBoxInstaller::class.java)
+        .build()
+        .newJob().add("cat ${ClashConfig.logPath}")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,8 +41,10 @@ class LogPage : Fragment() {
             while (true){
                 if (ClashStatus.isCmdRunning){
                     withContext(Dispatchers.Main){
-                        log_cat.text = "$clashV\n${readLog()}"
-                        scrollView.fullScroll(ScrollView.FOCUS_DOWN)
+                        runCatching {
+                            log_cat.text = "$clashV\n${readLog()}"
+                            scrollView.fullScroll(ScrollView.FOCUS_DOWN)
+                        }
                     }
                     delay(200)
                 } else {
