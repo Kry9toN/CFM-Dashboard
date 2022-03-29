@@ -82,9 +82,9 @@ object ClashConfig {
             ) {
                 callBack("配置莫得变化")
                 return
-            } else
-                Shell.cmd(
-                    "mv '$GExternalCacheDir/config_output.yaml' '$mergedConfigPath'")
+            } else {
+                Shell.cmd("mv -f '$GExternalCacheDir/config_output.yaml' '$mergedConfigPath'").exec()
+            }
         }.onFailure {
             callBack("合并失败啦")
             return
