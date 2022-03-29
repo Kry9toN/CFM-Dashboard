@@ -40,7 +40,7 @@
 
 ### 单机场（如需定制规则，不推荐这种方法） <a href="#undefined" id="undefined"></a>
 
-请打开模块默认配置目录下的`clash.config`文件, 将`auto_subscription`（魔改2为`auto_updateSubcript`）的值改为`true`并在`subscription_url`后填写你的clash订阅地址. 模块默认每天凌晨两点更新订阅, 你可以通过查看Clash配置目录下的`run`文件夹里的`run.logs`日志文件查看订阅是否更新成功(或查看相关文件时间戳), 如需更改自动订阅的时间, 可更改`update_interval`的值, 请自行学习[Crontab](https://en.wikipedia.org/wiki/Cron)相关内容。
+请打开模块默认配置目录下的`clash.config`文件, 将`auto_subscription`（魔改2为`Subcript_url`）的值改为`true`并在`subscription_url`后填写你的clash订阅地址. 模块默认每天凌晨两点更新订阅, 你可以通过查看Clash配置目录下的`run`文件夹里的`run.logs`日志文件查看订阅是否更新成功(或查看相关文件时间戳), 如需更改自动订阅的时间, 可更改`update_interval`的值, 请自行学习[Crontab](https://en.wikipedia.org/wiki/Cron)相关内容。
 
 ## 你也可以手动更新 <a href="#undefined" id="undefined"></a>
 
