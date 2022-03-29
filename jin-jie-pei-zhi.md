@@ -12,7 +12,7 @@
 
 ### 注意 <a href="#undefined" id="undefined"></a>
 
-`fake-ip`模式并不支持黑白名单，不走代理的应用会没网。
+`fake-ip`模式并不支持黑白名单，不走代理的应用可能会没网。
 
 不知道`fake-ip`是啥请看[config.yaml教材](broken-reference)。
 
@@ -30,6 +30,8 @@
 
 ### 单机场和多机场（原版使用这种方法需要自己手改配置文件） <a href="#undefined" id="undefined"></a>
 
+* **本订阅方式主要用于自己DIY分流规则，如图省事，想直接用机场提供的规则可以使用下方的**[**单机场订阅**](jin-jie-pei-zhi.md#undefined-2)****
+
 直接在`/data/clash/config.yaml`中填入自己的订阅地址即可
 
 `如果需要增减机场请参考`[config.yaml教材](broken-reference)。
@@ -40,7 +42,7 @@
 
 请打开模块默认配置目录下的`clash.config`文件, 将`auto_subscription`（魔改2为`auto_updateSubcript`）的值改为`true`并在`subscription_url`后填写你的clash订阅地址. 模块默认每天凌晨两点更新订阅, 你可以通过查看Clash配置目录下的`run`文件夹里的`run.logs`日志文件查看订阅是否更新成功(或查看相关文件时间戳), 如需更改自动订阅的时间, 可更改`update_interval`的值, 请自行学习[Crontab](https://en.wikipedia.org/wiki/Cron)相关内容。
 
-## 你也可以手动更新
+## 你也可以手动更新 <a href="#undefined" id="undefined"></a>
 
 **原版**更新指令为`/data/adb/modules/Clash_For_Magisk/scripts/clash.tool -s`
 
