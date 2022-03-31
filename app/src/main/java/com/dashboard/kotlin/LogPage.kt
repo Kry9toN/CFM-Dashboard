@@ -31,14 +31,27 @@ class LogPage : Fragment() {
         return inflater.inflate(R.layout.fragment_log, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        start()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        flag = false
+    }
+
+    var flag = false
+
     @SuppressLint("SetTextI18n")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    fun start(){
         lifecycleScope.launch(Dispatchers.IO) {
+            flag = true
             val clashV = Shell.cmd("${ClashConfig.corePath} -v").exec().out.last()
             withContext(Dispatchers.Main){
                 log_cat.text = "$clashV\n${readLog()}"
             }
-            while (true){
+            while (flag){
                 if (ClashStatus.isCmdRunning){
                     withContext(Dispatchers.Main){
                         runCatching {
