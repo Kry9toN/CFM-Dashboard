@@ -16,7 +16,7 @@
 
 ### 三版本通用 <a href="#undefined" id="undefined"></a>
 
-* **原版在Android12**下如不能控制请参阅[常见问题](broken-reference)
+* **原版在Android12**下如不能控制请参阅[常见问题](chang-jian-wen-ti.md)
 * 本方法存在局限性：如**用此方法停止后重启手机**只能用上方指令启动
 
 `touch /data/adb/modules/Clash_For_Magisk/disable` #停止
@@ -52,7 +52,7 @@ fork版还在维护，加入了一些小功能，如：日志显示、测速、�
 
 三大面板自行选择：[MetaCubeX/Dashboard](https://github.com/MetaCubeX/Dashboard)、[yacd](https://github.com/haishanh/yacd)、[razord](https://github.com/Dreamacro/clash-dashboard)
 
-* 下载面板文件解压到Clash配置目录某目录, 更改template文件里external-ui: 后的文件夹名称为该目录名重启Clash服务即可。见[config.yaml教材](broken-reference)。
+* 下载面板文件解压到Clash配置目录某目录, 更改template文件里external-ui: 后的文件夹名称为该目录名重启Clash服务即可。见[config.yaml教材。](config.yaml-jiao-cai.md)
 * **或**替换原来的面板文件既可
 
 ## RESTful API
