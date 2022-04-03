@@ -1,6 +1,6 @@
 # 进阶配置
 
-如果有高度自定义需求，请学习yaml语法（[教程1](http://c.biancheng.net/spring\_boot/yaml.html)、[教程2](https://www.yiibai.com/yaml/)、[教程3](https://www.ruanyifeng.com/blog/2016/07/yaml.html)）、并阅读[config.yaml](broken-reference)教材。
+如果有高度自定义需求，请学习yaml语法（[教程1](http://c.biancheng.net/spring\_boot/yaml.html)、[教程2](https://www.yiibai.com/yaml/)、[教程3](https://www.ruanyifeng.com/blog/2016/07/yaml.html)）、并阅读[config.yaml](config.yaml-jiao-cai.md)教材。
 
 ## 工作模式 <a href="#work_mod" id="work_mod"></a>
 
@@ -14,11 +14,11 @@
 
 `fake-ip`模式并不支持黑白名单，不走代理的应用可能会没网。
 
-不知道`fake-ip`是啥请看[config.yaml教材](broken-reference)。
+不知道`fake-ip`是啥请看[config.yaml教材](config.yaml-jiao-cai.md)。
 
 ## enhanced-mod
 
-有两个选项`fake-ip`和`redir-host`，具体参见[config.yaml教材](broken-reference)。
+有两个选项`fake-ip`和`redir-host`，具体参见[config.yaml教材](config.yaml-jiao-cai.md)。
 
 `fake-ip`[原理](https://blog.skk.moe/post/what-happend-to-dns-in-proxy/)
 
@@ -30,17 +30,17 @@
 
 ### 单机场和多机场（原版使用这种方法需要自己手改配置文件） <a href="#undefined" id="undefined"></a>
 
-* **本订阅方式主要用于自己DIY分流规则，如图省事，想直接用机场提供的规则可以使用下方的**[**单机场订阅**](jin-jie-pei-zhi.md#undefined-2)****
+* **本订阅方式主要用于自己DIY分流规则，如图省事，想直接用机场提供的规则可以使用下方的**[**单机场订阅**](jin-jie-pei-zhi.md#undefined-3)****
 
 直接在`/data/clash/config.yaml`中填入自己的订阅地址即可
 
-`如果需要增减机场请参考`[config.yaml教材](broken-reference)。
+`如果需要增减机场请参考`[config.yaml教材](config.yaml-jiao-cai.md)。
 
 ### 如仅需使用机场的规则，不需要自定义的请使用下方订阅方法
 
 ### 单机场（如需定制规则，不推荐这种方法） <a href="#undefined" id="undefined"></a>
 
-请打开模块默认配置目录下的`clash.config`文件, 将`auto_subscription`（魔改2为`auto_updateSubcript`）的值改为`true`并在`subscription_url`后填写你的clash订阅地址. 模块默认每天凌晨两点更新订阅, 你可以通过查看Clash配置目录下的`run`文件夹里的`run.logs`日志文件查看订阅是否更新成功(或查看相关文件时间戳), 如需更改自动订阅的时间, 可更改`update_interval`的值, 请自行学习[Crontab](https://en.wikipedia.org/wiki/Cron)相关内容。
+请打开模块默认配置目录下的`clash.config`文件, 将`auto_subscription`（魔改2为`Subcript_url`）的值改为`true`并在`subscription_url`后填写你的clash订阅地址. 模块默认每天凌晨两点更新订阅, 你可以通过查看Clash配置目录下的`run`文件夹里的`run.logs`日志文件查看订阅是否更新成功(或查看相关文件时间戳), 如需更改自动订阅的时间, 可更改`update_interval`的值, 请自行学习[Crontab](https://en.wikipedia.org/wiki/Cron)相关内容。
 
 ## 你也可以手动更新 <a href="#undefined" id="undefined"></a>
 
