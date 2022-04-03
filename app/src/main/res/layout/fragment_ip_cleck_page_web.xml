@@ -41,7 +41,7 @@
                         style="@style/IpCheckDefaultCardText"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="百度搜素"
+                        android:text="百度搜索"
                         android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <TextView
