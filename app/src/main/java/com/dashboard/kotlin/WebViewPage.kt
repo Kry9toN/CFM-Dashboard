@@ -27,17 +27,21 @@ class WebViewPage : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d("ViewCreated", "WebViewPageViewCreated")
-
-        arguments?.getString("URL")?.let {
-            webView.settings.javaScriptEnabled = true
-            webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
-            webView.settings.domStorageEnabled = true
-            webView.settings.databaseEnabled = true
-            webView.webViewClient = WebViewClient()
-            webView.loadUrl(it)
+        webView.apply {
+            settings.apply {
+                javaScriptEnabled = true
+                cacheMode = WebSettings.LOAD_NO_CACHE
+                domStorageEnabled = true
+                databaseEnabled = true
+            }
+            webViewClient = WebViewClient()
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        webView.loadUrl("")
+    }
 
     override fun onResume() {
         super.onResume()
@@ -49,6 +53,9 @@ class WebViewPage : Fragment() {
             }else{
                 webView.settings.forceDark = WebSettings.FORCE_DARK_OFF
             }
+        }
+        arguments?.getString("URL")?.let {
+            webView.loadUrl(it)
         }
     }
 

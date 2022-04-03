@@ -106,9 +106,7 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
         }
 
         menu_speed_test.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("URL", "https://fast.com/zh/cn/")
-            it.findNavController().navigate(R.id.action_mainPage_to_webViewPage, bundle)
+            it.findNavController().navigate(R.id.action_mainPage_to_speedTestPage)
         }
 
         viewPager.adapter = object: FragmentStateAdapter(this){

@@ -24,15 +24,28 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_mainPage_to_speedTestPage"
+            app:destination="@id/speedTestPage"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/webViewPage"
         android:name="com.dashboard.kotlin.WebViewPage"
         android:label="fragment_webview_page"
-        tools:layout="@layout/fragment_webview_page" />
+        tools:layout="@layout/fragment_webview_page" >
+    </fragment>
     <fragment
         android:id="@+id/ipCheckPage"
         android:name="com.dashboard.kotlin.IpCheckPage"
         android:label="fragment_ip_check_page"
         tools:layout="@layout/fragment_ip_check_page" />
+    <fragment
+        android:id="@+id/speedTestPage"
+        android:name="com.dashboard.kotlin.SpeedTestPage"
+        android:label="fragment_speed_test_page"
+        tools:layout="@layout/fragment_speed_test_page" />
 </navigation>
