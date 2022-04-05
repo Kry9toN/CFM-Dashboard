@@ -46,7 +46,6 @@ class IpCheckPage : Fragment() {
         githubCheckThreadContext = newSingleThreadContext("githubCheckThread")
         youtubeCheckThreadContext = newSingleThreadContext("youtubeCheckThread")
 
-
         coroutineScope = lifecycleScope.launch(Dispatchers.IO) {
             launch(sukkAPiThreadContext) {
                 val tempStr: String = try {

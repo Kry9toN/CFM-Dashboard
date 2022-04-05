@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -17,7 +15,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.dashboard.kotlin.clashhelper.ClashConfig
 import com.dashboard.kotlin.clashhelper.ClashStatus
-import com.dashboard.kotlin.clashhelper.ClashStatus.getStatus
 import com.dashboard.kotlin.clashhelper.CommandHelper
 import com.topjohnwu.superuser.Shell
 import kotlinx.android.synthetic.main.fragment_main_page.*
@@ -25,16 +22,10 @@ import kotlinx.android.synthetic.main.fragment_main_page_buttons.*
 import kotlinx.android.synthetic.main.fragment_main_pages.*
 import kotlinx.coroutines.*
 import org.json.JSONObject
-import java.io.File
-import java.util.*
 
 
 @DelicateCoroutinesApi
 class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickListener {
-
-    private val handler = Handler(Looper.getMainLooper())
-    private lateinit var timer: Timer
-    private lateinit var statusScope: Job
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,8 +72,6 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
                 }
             }
 
-        } else {
-            setRunStatusTimer()
         }
 
         clash_status.setOnClickListener {
@@ -129,67 +118,60 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
             })
     }
 
-    private fun setRunStatusTimer(){
-        runCatching { timer.cancel() }
-        timer = Timer()
-        timer.schedule(object : TimerTask() {
-            override fun run() {
-                handler.post{
-                    runCatching {
-                        when {
-                            ClashStatus.isCmdRunning ->
-                                setStatusCmdRunning()
-                            ClashStatus.runStatus() ->
-                                setStatusRunning()
-                            else ->
-                                setStatusStopped()
-                        }
-                    }
-                }
-            }
-        },0, 300)
+    private fun stopStatusScope(){
+        ClashStatus.stopGetStatus()
     }
 
-    private fun setStatusScope() {
-        runCatching { statusScope.cancel() }
-        statusScope = lifecycleScope.launch(Dispatchers.IO) {
-            while (ClashStatus.statusThreadFlag) {
-                runCatching {
-                    val jsonObject = JSONObject(ClashStatus.statusRawText)
-                    val upText: String = CommandHelper.autoUnitForSpeed(jsonObject.optString("up"))
-                    val downText: String =
-                        CommandHelper.autoUnitForSpeed(jsonObject.optString("down"))
-                    val res = CommandHelper.autoUnitForSize(jsonObject.optString("RES"))
-                    val cpu = jsonObject.optString("CPU")
-                    withContext(Dispatchers.Main) {
-                        resources_status_text.text =
-                            getString(R.string.netspeed_status_text).format(
-                                upText,
-                                downText,
-                                res,
-                                cpu
-                            )
-                    }
-                }
-                delay(600)
+    private fun startStatusScope() {
+        ClashStatus.startGetStatus{ statusText ->
+            runCatching {
+                val jsonObject = JSONObject(statusText)
+                val upText: String = CommandHelper.autoUnitForSpeed(jsonObject.optString("up"))
+                val downText: String =
+                    CommandHelper.autoUnitForSpeed(jsonObject.optString("down"))
+                val res = CommandHelper.autoUnitForSize(jsonObject.optString("RES"))
+                val cpu = jsonObject.optString("CPU")
+                    resources_status_text.text =
+                        getString(R.string.netspeed_status_text).format(
+                            upText,
+                            downText,
+                            res,
+                            cpu
+                        )
             }
         }
     }
 
+    var runningStatusScope: Job? = null
+
     override fun onPause() {
         super.onPause()
         Log.d("onPause", "MainPagePause")
-        ClashStatus.stopGetStatus()
-        timer.cancel()
+        stopStatusScope()
+        runningStatusScope?.cancel()
+        runningStatusScope = null
     }
 
     override fun onResume() {
         super.onResume()
         Log.d("onResume", "MainPageResume")
-        ClashStatus.getStatus()
-        setRunStatusTimer()
-        if (ClashStatus.runStatus())
-            setStatusScope()
+
+        runningStatusScope?.cancel()
+        runningStatusScope = lifecycleScope.launch(Dispatchers.Default){
+            var last: ClashStatus.Status? = null
+            while (true){
+                ClashStatus.getRunStatus {
+                    if (last == it) return@getRunStatus
+                    last = it
+                    when(it){
+                        ClashStatus.Status.CmdRunning -> setStatusCmdRunning()
+                        ClashStatus.Status.Running -> setStatusRunning()
+                        ClashStatus.Status.Stop -> setStatusStopped()
+                    }
+                }
+                delay(400)
+            }
+        }
     }
 
     private fun restartApp() {
@@ -201,8 +183,9 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
     }
 
     private fun setStatusRunning(){
-        if (clash_status_text.text == getString(R.string.clash_enable))
-            return
+        startStatusScope()
+        //if (clash_status_text.text == getString(R.string.clash_enable))
+        //    return
         clash_status.isClickable = true
         clash_status.setCardBackgroundColor(
             ResourcesCompat.getColor(resources, R.color.colorPrimary, context?.theme)
@@ -213,15 +196,11 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
         clash_status_text.text = getString(R.string.clash_enable)
 
         resources_status_text.visibility = View.VISIBLE
-
-        ClashStatus.getStatus()
-
-        setStatusScope()
     }
 
     private fun setStatusCmdRunning(){
-        if (clash_status_text.text == getString(R.string.clash_charging))
-            return
+        //if (clash_status_text.text == getString(R.string.clash_charging))
+        //    return
         clash_status.isClickable = false
         clash_status.setCardBackgroundColor(
             ResourcesCompat.getColor(
@@ -239,12 +218,12 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
         )
         clash_status_text.text = getString(R.string.clash_charging)
         resources_status_text.visibility = View.INVISIBLE
-        ClashStatus.stopGetStatus()
+        stopStatusScope()
     }
 
     private fun setStatusStopped(){
-        if (clash_status_text.text == getString(R.string.clash_disable))
-            return
+        //if (clash_status_text.text == getString(R.string.clash_disable))
+        //    return
         clash_status.isClickable = true
         clash_status.setCardBackgroundColor(
             ResourcesCompat.getColor(resources, R.color.gray, context?.theme)
@@ -258,7 +237,7 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
         )
         clash_status_text.text = getString(R.string.clash_disable)
         resources_status_text.visibility = View.INVISIBLE
-        ClashStatus.stopGetStatus()
+        stopStatusScope()
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean =
@@ -274,12 +253,14 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
                 true
             }
             R.id.menu_update_config -> {
-                if (ClashStatus.runStatus())
-                    ClashConfig.updateConfig{
-                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-                    }
-                else
-                    Toast.makeText(context, "Clash没启动呢", Toast.LENGTH_SHORT).show()
+                ClashStatus.getRunStatus { status ->
+                    if (status == ClashStatus.Status.Running)
+                        ClashConfig.updateConfig{
+                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                        }
+                    else
+                        Toast.makeText(context, "Clash没启动呢", Toast.LENGTH_SHORT).show()
+                }
                 true
             }
             else -> false

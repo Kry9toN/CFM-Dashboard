@@ -38,30 +38,31 @@ class LogPage : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        flag = false
+        readLogScope?.cancel()
     }
 
-    var flag = false
+    var readLogScope: Job? = null
 
     @SuppressLint("SetTextI18n")
     fun start(){
-        lifecycleScope.launch(Dispatchers.IO) {
-            flag = true
+        if (readLogScope?.isActive == true) return
+        readLogScope = lifecycleScope.launch(Dispatchers.IO) {
             val clashV = Shell.cmd("${ClashConfig.corePath} -v").exec().out.last()
             withContext(Dispatchers.Main){
                 log_cat.text = "$clashV\n${readLog()}"
             }
-            while (flag){
-                if (ClashStatus.isCmdRunning){
-                    withContext(Dispatchers.Main){
-                        runCatching {
-                            log_cat.text = "$clashV\n${readLog()}"
-                            scrollView.fullScroll(ScrollView.FOCUS_DOWN)
-                        }
+            while (true){
+                withContext(Dispatchers.Main){
+                    runCatching {
+                        log_cat.text = "$clashV\n${readLog()}"
+                        scrollView.fullScroll(ScrollView.FOCUS_DOWN)
                     }
+                }
+
+                if (ClashStatus.isCmdRunning){
                     delay(200)
                 } else {
-                    delay(600)
+                    delay(1000)
                 }
             }
         }

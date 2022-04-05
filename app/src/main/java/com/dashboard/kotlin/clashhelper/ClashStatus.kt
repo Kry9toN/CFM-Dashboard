@@ -2,44 +2,59 @@ package com.dashboard.kotlin.clashhelper
 
 import android.util.Log
 import com.topjohnwu.superuser.Shell
+import kotlinx.coroutines.*
 import java.net.HttpURLConnection
 import java.net.URL
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
-import kotlin.concurrent.thread
 
 @DelicateCoroutinesApi
 object ClashStatus {
-    var statusThreadFlag: Boolean = true
-        private set
-    var statusRawText: String = "{\"up\":\"0\",\"down\":\"0\",\"RES\":\"0\",\"CPU\":\"0%\"}"
-    fun runStatus(): Boolean {
-        var isRunning = false
-        thread(start = true) {
-            isRunning = try {
+
+    private var getStatusScope: Job? = null
+
+    enum class Status{
+        CmdRunning, Running, Stop
+    }
+
+    fun getRunStatus(mainScope: Boolean = true, cb: (Status)->Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val status =  when {
+                isCmdRunning -> Status.CmdRunning
+                clashRunning -> Status.Running
+                else -> Status.Stop
+            }
+            if (mainScope)
+                withContext(Dispatchers.Main){
+                    cb(status)
+                }
+            else
+                cb(status)
+        }
+    }
+
+    private val clashRunning: Boolean
+        get() =
+            runCatching {
                 val conn =
                     URL(ClashConfig.baseURL).openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
                 conn.setRequestProperty("Authorization", "Bearer ${ClashConfig.secret}")
-                val matches = conn.inputStream.bufferedReader()
+                conn.inputStream.bufferedReader()
                     .readText().contains("{\"hello\":\"clash")
-                matches
-            } catch (ex: Exception) {
-                false
-            }
-        }.join()
-        return isRunning
-    }
+            }.onFailure {
+                Log.e("TAG", "clashRunning: $it", )
+            }.getOrDefault(false)
 
-    fun getStatus() {
-        statusThreadFlag = true
-        val secret = ClashConfig.secret
-        val baseURL = ClashConfig.baseURL
-        GlobalScope.launch(Dispatchers.IO) {
+
+    private val isGetStatusRunning
+        get() = getStatusScope?.isActive?:false
+
+    fun startGetStatus(cb: (String)->Unit) {
+        if (isGetStatusRunning) return
+        getStatusScope = GlobalScope.launch(Dispatchers.IO) {
+            val secret = ClashConfig.secret
+            val baseURL = ClashConfig.baseURL
             runCatching {
                 val conn =
                     URL("${baseURL}/traffic").openConnection() as HttpURLConnection
@@ -50,7 +65,7 @@ object ClashStatus {
                     var lastCpuTotal = 0L
                     var lastClashCpuTotal = 0L
 
-                    while (statusThreadFlag) {
+                    while (true) {
                         var cpuTotal = 0L
                         var clashCpuTotal = 0L
                         Shell.cmd("cat /proc/stat | grep \"cpu \"").exec().out.first()
@@ -83,10 +98,14 @@ object ClashStatus {
                             "cat /proc/`cat ${ClashConfig.pidPath}`/status | grep VmRSS | awk '{print \$2}'"
                         ).exec().out.first()
 
-                        statusRawText = it.bufferedReader().readLine()
-                            .replace("}", ",\"RES\":\"$res\",\"CPU\":\"$cpuAVG%\"}")
+                        withContext(Dispatchers.Main){
+                            cb(
+                                it.bufferedReader().readLine()
+                                    .replace("}", ",\"RES\":\"$res\",\"CPU\":\"$cpuAVG%\"}")
+                            )
+                        }
 
-                        Thread.sleep(600)
+                        delay(600)
                     }
                 }
             }.onFailure {
@@ -96,7 +115,8 @@ object ClashStatus {
     }
 
     fun stopGetStatus() {
-        statusThreadFlag = false
+        getStatusScope?.cancel()
+        getStatusScope = null
     }
 
     var isCmdRunning = false
@@ -124,11 +144,12 @@ object ClashStatus {
     }
 
     fun switch(){
-        if (isCmdRunning) return
-        if (runStatus())
-            stop()
-        else
-            start()
+        getRunStatus(false) {
+            if (it == Status.Running)
+                stop()
+            else
+                start()
+        }
     }
 
     fun updateGeox(){
