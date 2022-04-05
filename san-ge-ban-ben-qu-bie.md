@@ -22,7 +22,7 @@
 
 ## 魔改版2 <a href="#mc2" id="mc2"></a>
 
-下载方式 [Github发布页](https://github.com/Adlyq/DashBoard-1/releases) 或 [Telegram CI](https://t.me/MagiskChangeKing)
+下载方式 [Github发布页](https://github.com/Adlyq/DashBoard-1/releases) 或 [Telegram ](https://t.me/MagiskChangeKing)hannels
 
 ![](.gitbook/assets/5b09923a500bb4314af00.png)
 
@@ -34,3 +34,6 @@
 * 已完成简单分流模板
 * Android12下使用Magisk启停修复
 * 配置文件过小时部分设备启动时loop修复（需Github发布页V4.8及以上）
+* 部分IPV6支持（不支持V6DNS通过内核解析）
+* TUN模式支持（未实现局域网共享翻墙，黑白名单）
+* 使用cgroup限制内存的使用（内测功能，需在频道自行下载）
