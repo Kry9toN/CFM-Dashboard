@@ -1,6 +1,6 @@
 # 进阶配置
 
-如果有高度自定义需求，请学习yaml语法（[教程1](http://c.biancheng.net/spring\_boot/yaml.html)、[教程2](https://www.yiibai.com/yaml/)、[教程3](https://www.ruanyifeng.com/blog/2016/07/yaml.html)）、并阅读[config.yaml](config.yaml-jiao-cai.md)教材。
+如果有高度自定义需求，请学习yaml语法（[教程1](http://c.biancheng.net/spring\_boot/yaml.html)、[教程2](https://www.yiibai.com/yaml/)、[教程3](https://www.ruanyifeng.com/blog/2016/07/yaml.html)）、并阅读[config.yaml教材](textbook.md)。
 
 ## 工作模式 <a href="#work_mod" id="work_mod"></a>
 
@@ -14,11 +14,11 @@
 
 `fake-ip`模式并不支持黑白名单，不走代理的应用可能会没网。
 
-不知道`fake-ip`是啥请看[config.yaml教材](config.yaml-jiao-cai.md)。
+不知道`fake-ip`是啥请看[config.yaml教材](textbook.md)。
 
 ## enhanced-mod
 
-有两个选项`fake-ip`和`redir-host`，具体参见[config.yaml教材](config.yaml-jiao-cai.md)。
+有两个选项`fake-ip`和`redir-host`，具体参见[config.yaml教材](textbook.md)。
 
 `fake-ip`[原理](https://blog.skk.moe/post/what-happend-to-dns-in-proxy/)
 
@@ -30,11 +30,11 @@
 
 ### 单机场和多机场（原版使用这种方法需要自己手改配置文件） <a href="#undefined" id="undefined"></a>
 
-* **本订阅方式主要用于自己DIY分流规则，如图省事，想直接用机场提供的规则可以使用下方的**[**单机场订阅**](jin-jie-pei-zhi.md#undefined-3)****
+* **本订阅方式主要用于自己DIY分流规则，如图省事，想直接用机场提供的规则可以使用下方的**[**单机场订阅**](cfg.md#undefined-3)****
 
 直接在`/data/clash/config.yaml`中填入自己的订阅地址即可
 
-`如果需要增减机场请参考`[config.yaml教材](config.yaml-jiao-cai.md)。
+`如果需要增减机场请参考`[config.yaml教材](textbook.md)。
 
 ### 如仅需使用机场的规则，不需要自定义的请使用下方订阅方法
 

@@ -4,7 +4,7 @@
 
 ## 原版 <a href="#original" id="original"></a>
 
-下载方式 [Github](https://github.com/kalasutra/Clash\_For\_Magisk)（需自行打包） 及 [Telegram CI](https://t.me/db4cm)
+下载方式 [Github](https://github.com/kalasutra/Clash\_For\_Magisk)（需自行打包） 及 [Telegram Channel](https://t.me/db4cm)
 
 * 只支持单机场订阅（可以手撸多机场，但是还不如用已经撸好的魔改版）
 
@@ -22,7 +22,7 @@
 
 ## 魔改版2 <a href="#mc2" id="mc2"></a>
 
-下载方式 [Github发布页](https://github.com/Adlyq/DashBoard-1/releases) 或 [Telegram ](https://t.me/MagiskChangeKing)hannels
+下载方式 [Github发布页](https://github.com/Adlyq/DashBoard-1/releases) 或 [Telegram Channel](https://t.me/MagiskChangeKing)
 
 ![](.gitbook/assets/5b09923a500bb4314af00.png)
 

@@ -78,7 +78,7 @@ DashBoard无法控制启停
 
 **方法**
 
-更换DB，见[控制方法](kong-zhi-fang-fa.md)部分
+更换DB，见[控制方法](ctrl.md)部分
 
 ## 问题5:所有软件没网 <a href="#q5" id="q5"></a>
 
@@ -101,7 +101,7 @@ DashBoard无法控制启停
 
 * 尝试其它节点
 * 尝试`global`模式
-* 尝试`fake-ip`模式，具体参见[enhanced-mod](jin-jie-pei-zhi.md#enhanced-mod)
+* 尝试`fake-ip`模式，具体参见[enhanced-mod](cfg.md#enhanced-mod)
 
 ## 问题7:源地址全为ip,概率没网 <a href="#q7" id="q7"></a>
 
@@ -117,7 +117,7 @@ clash连接日志里显示的所有连接源为ip地址, 规则无法生效且�
 
 **方法**
 
-请保持`allow-lan: true`且保证dns监听地址由`127.0.0.1`改为`0.0.0.0`.可在控制面板临时打开亦可在template文件中更改. 可能还需要打开至少socks端口、http端口、mixed端口之一，具体请参见[config.yaml教材](config.yaml-jiao-cai.md)
+请保持`allow-lan: true`且保证dns监听地址由`127.0.0.1`改为`0.0.0.0`.可在控制面板临时打开亦可在template文件中更改. 可能还需要打开至少socks端口、http端口、mixed端口之一，具体请参见[config.yaml教材](textbook.md)
 
 ## 问题9:无法用Magisk启停 <a href="#q9" id="q9"></a>
 
