@@ -38,7 +38,9 @@ bin_path=/data/adb/modules/Clash_For_Magisk/system/bin/clash
 
 **方法**
 
-执行`${bin_path} -d /data/clash/ -t -f /data/clash/config.yaml`根据错误输出改文件
+使用[检查工具](https://t.me/MagiskChangeKing/40)检查配置
+
+或者手动执行`${bin_path} -d /data/clash/ -t -f /data/clash/config.yaml`根据错误输出改文件
 
 ## 问题2:配置合并失败或卡死 <a href="#q2" id="q2"></a>
 
@@ -58,7 +60,9 @@ bin_path=/data/adb/modules/Clash_For_Magisk/system/bin/clash
 
 **方法**
 
-按顺序检查
+使用[检查工具](https://t.me/MagiskChangeKing/40)检查配置
+
+或者手动按顺序检查
 
 1. 执行`${bin_path} -d /data/clash/ -t -f /data/clash/config.yaml`根据错误输出改文件
 2. **别开着别的代理启动CFM，尤其是CFA**
