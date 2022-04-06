@@ -22,6 +22,7 @@ class LogPage : Fragment() {
         .setInitializers(BusyBoxInstaller::class.java)
         .build()
         .newJob().add("cat ${ClashConfig.logPath}")
+    var flag = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,23 +47,29 @@ class LogPage : Fragment() {
     @SuppressLint("SetTextI18n")
     fun start(){
         if (readLogScope?.isActive == true) return
+        log_cat.setOnTouchListener { v, _ ->
+            flag = true
+            v.performClick()
+            false
+        }
         readLogScope = lifecycleScope.launch(Dispatchers.IO) {
             val clashV = Shell.cmd("${ClashConfig.corePath} -v").exec().out.last()
             withContext(Dispatchers.Main){
                 log_cat.text = "$clashV\n${readLog()}"
             }
             while (true){
+                if (ClashStatus.isCmdRunning){
+                    flag = false
+                    delay(200)
+                } else {
+                    delay(1000)
+                }
+                if (flag) continue
                 withContext(Dispatchers.Main){
                     runCatching {
                         log_cat.text = "$clashV\n${readLog()}"
                         scrollView.fullScroll(ScrollView.FOCUS_DOWN)
                     }
-                }
-
-                if (ClashStatus.isCmdRunning){
-                    delay(200)
-                } else {
-                    delay(1000)
                 }
             }
         }
