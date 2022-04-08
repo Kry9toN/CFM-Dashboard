@@ -97,12 +97,10 @@ object ClashStatus {
                         val res = Shell.cmd(
                             "cat /proc/`cat ${ClashConfig.pidPath}`/status | grep VmRSS | awk '{print \$2}'"
                         ).exec().out.first()
-
+                        val result = it.bufferedReader().readLine()
+                            .replace("}", ",\"RES\":\"$res\",\"CPU\":\"$cpuAVG%\"}")
                         withContext(Dispatchers.Main){
-                            cb(
-                                it.bufferedReader().readLine()
-                                    .replace("}", ",\"RES\":\"$res\",\"CPU\":\"$cpuAVG%\"}")
-                            )
+                            cb(result)
                         }
 
                         delay(600)
