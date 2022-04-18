@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.webkit.WebView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -116,6 +117,11 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
                     KV.putInt("ViewPagerIndex", position)
                 }
             })
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(150)
+            WebView(requireContext())
+        }
     }
 
     private fun stopStatusScope(){

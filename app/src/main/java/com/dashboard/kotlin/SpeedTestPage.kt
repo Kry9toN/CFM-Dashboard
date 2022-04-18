@@ -30,7 +30,7 @@ class SpeedTestPage : Fragment() {
                 "https://www.speedtest.net/"
             )
 
-            override fun getItemCount() = 3
+            override fun getItemCount() = urls.size
 
             override fun createFragment(position: Int) = WebViewPage().also {
                 it.arguments = Bundle().apply {
