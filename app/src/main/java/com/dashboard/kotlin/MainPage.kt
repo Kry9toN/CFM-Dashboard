@@ -119,7 +119,7 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
             })
 
         lifecycleScope.launch(Dispatchers.Main) {
-            delay(150)
+            delay(200)
             WebView(requireContext())
         }
     }
