@@ -29,11 +29,10 @@
 * 已写好[proxy-providers](https://github.com/Dreamacro/clash/wiki/configuration#proxy-providers)(多机场订阅)、[rule-providers](https://github.com/Dreamacro/clash/wiki/premium-core-features#rule-providers)模板
 * 支持自动更新GeoIP.dat、GeoSite.dat及Country.mmdb
 * 小幅优化启动速度
-* 换核免重启（需Github发布页V4.4及以上）
+* 换核免重启
 * 配置相对原版简单
 * 已完成简单分流模板
 * Android12下使用Magisk启停修复
-* 配置文件过小时部分设备启动时loop修复（需Github发布页V4.8及以上）
-* 部分IPV6支持（不支持V6DNS通过内核解析）
-* TUN模式支持（未实现局域网共享翻墙，黑白名单）
-* 使用cgroup限制内存的使用（内测功能，需在频道自行下载）
+* IPV6支持（Tproxy模式DNS不支持通过内核解析）
+* TUN模式支持
+* 使用cgroup限制内存的使用

@@ -34,7 +34,7 @@
 
 直接在`/data/clash/config.yaml`中填入自己的订阅地址即可
 
-`如果需要增减机场请参考`[config.yaml教材](textbook.md)。
+如果需要增减机场请参考[config.yaml教材](textbook.md)。
 
 ### 如仅需使用机场的规则，不需要自定义的请使用下方订阅方法
 

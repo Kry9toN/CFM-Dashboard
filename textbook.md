@@ -1,5 +1,7 @@
 # config.yaml教材
 
+本教材仅展示了基本配置，如需详细了解请参考[官方wiki](https://github.com/Dreamacro/clash/wiki/)，如使用Meta内核也可参考[Meta Wiki](https://clashmeta.gitbook.io/meta/)
+
 ```yaml
 # 必须开启、模块赖以工作的条件
 tproxy-port: 7893
