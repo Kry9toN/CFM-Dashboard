@@ -3,12 +3,11 @@
 本教材仅展示了基本配置，如需详细了解请参考[官方wiki](https://github.com/Dreamacro/clash/wiki/)，如使用Meta内核也可参考[Meta Wiki](https://clashmeta.gitbook.io/meta/)
 
 ```yaml
-# 必须开启、模块赖以工作的条件
+# Tproxy模式必须开启，该模式赖以工作的条件
 tproxy-port: 7893
-bind-address: '*'
-# HTTP 代理端口
+# HTTP 代理端口， 选择开启，用不上就别开，用的核电池当我没说
 port: 7890
-# SOCKS5 代理端口
+# SOCKS5 代理端口 选择开启，用不上就别开
 socks-port: 7891
 # 是否允许局域网的连接，如关闭会导致热点没用网络
 allow-lan: false
@@ -25,10 +24,16 @@ external-ui: yacd
 # 网页面板的密码
 secret: 'clash'
 
+tun:
+  enable: false # 启用TUN模式，优先级高于Tproxy
+  stack: system # system/gvisor二选一，system性能更好，但兼容性较差
+  dns-hijack:
+    - 0.0.0.0:53 # 推荐值
+  auto-route: true # 必须为true或者不写
 dns:
-    # 必须为true
+    # Tproxy模式下必须为true
     enable: true
-    # 不要改变端口，若allow-lan为true则必须为0.0.0.0:1053
+    # 不要改变端口，若allow-lan为true则必须为0.0.0.0:1053，如果用TUN可以注释掉
     listen: 0.0.0.0:1053
     # 如无必要不建议启用IPV6
     ipv6: false
