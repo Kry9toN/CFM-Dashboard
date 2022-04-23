@@ -83,7 +83,11 @@ object ClashConfig {
                 callBack("配置莫得变化")
                 return
             } else {
-                Shell.cmd("mv -f '$GExternalCacheDir/config_output.yaml' '$mergedConfigPath'").exec()
+                val cmd = Shell.cmd("cp -f '$GExternalCacheDir/config_output.yaml' '$mergedConfigPath'").exec()
+                if (cmd.isSuccess.not()){
+                    callBack("${cmd.out}")
+                    return
+                }
             }
         }.onFailure {
             callBack("合并失败啦")
@@ -150,6 +154,7 @@ object ClashConfig {
             "$GExternalCacheDir/$outputFileName"
         )
         deleteFile(GExternalCacheDir, "config.yaml")
+        Log.e("TAG", "mergeConfig: $GExternalCacheDir", )
     }
 
     private fun getExternalController(): String {

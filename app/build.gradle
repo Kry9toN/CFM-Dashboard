@@ -16,7 +16,7 @@ android {
         applicationId "com.dashboard.kotlin"
         minSdkVersion 26
         targetSdkVersion 32
-        versionCode  gitCommitCount.toInteger()
+        versionCode gitCommitCount.toInteger()
         versionName "5.3"
         versionNameSuffix = ".r${gitCommitCount}.${gitCommitHash}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -62,10 +62,10 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
     //mmkv
-    implementation 'com.tencent:mmkv-static:1.2.12'
+    implementation 'com.tencent:mmkv-static:1.2.13'
 
     def libsuVersion = '4.0.3'
     implementation "com.github.topjohnwu.libsu:core:${libsuVersion}"
