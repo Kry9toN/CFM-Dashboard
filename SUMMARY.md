@@ -3,6 +3,7 @@
 * [Clash For Magisk简介](README.md)
 * [前言](<README (1).md>)
 * [三个版本区别](diff.md)
+* [魔二特别说明](mc2d.md)
 * [安装模块](install.md)
 * [基本配置](base\_cfg.md)
 * [进阶配置](cfg.md)
