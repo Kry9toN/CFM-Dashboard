@@ -58,14 +58,9 @@ object ClashConfig {
         "http://${getExternalController()}"
     }
 
-    var dashBoard: String
-        get() = getFromFile("$GExternalCacheDir/template", arrayOf("external-ui"))
-        set(value) {
-            setFileNR(
-                dataPath, "template"
-            ) { modifyFile("$GExternalCacheDir/template", "external-ui", value) }
-            return
-        }
+    val dashBoard by  lazy {
+        getFromFile("$GExternalCacheDir/template", arrayOf("external-ui"))
+    }
 
     val secret by lazy {
         getFromFile("$GExternalCacheDir/template", arrayOf("secret"))
@@ -161,10 +156,11 @@ object ClashConfig {
 
         val temp = getFromFile("$GExternalCacheDir/template", arrayOf("external-controller"))
 
-        return if (temp.startsWith(":"))
-            "127.0.0.1$temp"
-        else
-            temp
+        return when {
+            temp.trim() == "" -> "127.0.0.1:9090"
+            temp.startsWith(":") -> "127.0.0.1$temp"
+            else -> temp
+        }
     }
 
 
