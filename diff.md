@@ -33,6 +33,6 @@
 * 配置相对原版简单
 * 已完成简单分流模板
 * Android12下使用Magisk启停修复
-* IPV6支持
+* IPV6支持（Tproxy模式DNS不支持通过内核解析）
 * TUN模式支持
 * 使用cgroup限制内存的使用
