@@ -48,7 +48,10 @@
 
 **魔改版1**指令为`/data/clash/scripts/clash.tool -s`
 
-**魔改版2**指令为`/data/clash/scripts/clash.tool -`u
+**魔改版2**指令
+
+* 更新订阅：`/data/clash/scripts/clash.tool -s`
+* 更新GeoX：`/data/clash/scripts/clash.tool -u`
 
 ## 配合类Adguard应用使用 <a href="#adg" id="adg"></a>
 
