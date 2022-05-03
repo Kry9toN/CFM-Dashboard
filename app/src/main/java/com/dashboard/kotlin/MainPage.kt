@@ -1,14 +1,20 @@
 package com.dashboard.kotlin
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.Spanned
+import android.text.method.DigitsKeyListener
 import android.util.Log
 import android.view.*
 import android.webkit.WebView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -17,6 +23,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.dashboard.kotlin.clashhelper.ClashConfig
 import com.dashboard.kotlin.clashhelper.ClashStatus
 import com.dashboard.kotlin.clashhelper.CommandHelper
+import com.dashboard.kotlin.clashhelper.WebUI
 import com.topjohnwu.superuser.Shell
 import kotlinx.android.synthetic.main.fragment_main_page.*
 import kotlinx.android.synthetic.main.fragment_main_page_buttons.*
@@ -26,7 +33,8 @@ import org.json.JSONObject
 
 
 @DelicateCoroutinesApi
-class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickListener {
+class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickListener,
+    View.OnLongClickListener {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,23 +88,34 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
         }
 
         menu_ip_check.setOnClickListener {
-            it.findNavController().navigate(R.id.action_mainPage_to_ipCheckPage)
+            runCatching {
+                it.findNavController().navigate(R.id.action_mainPage_to_ipCheckPage)
+            }
         }
 
+        menu_web_dashboard.setOnLongClickListener(this)
         menu_web_dashboard.setOnClickListener {
             val bundle = Bundle()
-            bundle.putString("URL", "${ClashConfig.baseURL}/ui/" +
+
+            val db = runCatching {
+                WebUI.valueOf(KV.getString("DB_NAME", "LOCAL")!!).url
+            }.getOrDefault("${ClashConfig.baseURL}/ui/")
+            bundle.putString("URL", db +
                     if ((context?.resources?.configuration?.uiMode
                             ?.and(Configuration.UI_MODE_NIGHT_MASK)) == Configuration.UI_MODE_NIGHT_YES) {
                         "?theme=dark"
                     }else{
                         "?theme=light"
                     })
-            it.findNavController().navigate(R.id.action_mainPage_to_webViewPage, bundle)
+            runCatching {
+                it.findNavController().navigate(R.id.action_mainPage_to_webViewPage, bundle)
+            }
         }
 
         menu_speed_test.setOnClickListener {
-            it.findNavController().navigate(R.id.action_mainPage_to_speedTestPage)
+            runCatching {
+                it.findNavController().navigate(R.id.action_mainPage_to_speedTestPage)
+            }
         }
 
         viewPager.adapter = object: FragmentStateAdapter(this){
@@ -271,4 +290,53 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
             }
             else -> false
         }
+
+    override fun onLongClick(p0: View?): Boolean {
+        AlertDialog.Builder(context).apply {
+            setTitle("选择Web面板")
+            setView(LinearLayout(context).also { ll ->
+                val edit = EditText(context).also {
+                    it.visibility = View.GONE
+                    it.setText(WebUI.OTHER.url)
+                    it.setSingleLine()
+                    it.addTextChangedListener { text ->
+                        WebUI.OTHER.url = text.toString()
+                    }
+                }
+                ll.orientation = LinearLayout.VERTICAL
+                ll.addView(
+                    Spinner(context).also {
+                        it.adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1,
+                            WebUI.values())
+                        runCatching {
+                            it.setSelection(
+                                WebUI.values().toList().indexOf(
+                                    WebUI.valueOf(
+                                        KV.getString("DB_NAME", "LOCAL")!!
+                                    )
+                                )
+                            )
+                        }
+                        it.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(adapter: AdapterView<*>, v: View,
+                                                        index: Int, id: Long
+                            ) {
+                                KV.putString("DB_NAME", (v as TextView).text.toString())
+                                if (v.text == WebUI.OTHER.name)
+                                    edit.visibility = View.VISIBLE
+                                else
+                                    edit.visibility = View.GONE
+                            }
+
+                            override fun onNothingSelected(p0: AdapterView<*>) {
+                                KV.putString("DB_NAME", WebUI.LOCAL.name)
+                            }
+                        }
+                    }
+                )
+                ll.addView(edit)
+            })
+        }.show()
+        return true
+    }
 }

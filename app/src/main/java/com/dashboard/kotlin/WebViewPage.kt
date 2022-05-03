@@ -26,7 +26,7 @@ class WebViewPage : Fragment() {
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("ViewCreated", "WebViewPageViewCreated")
+        Log.d("ViewCreated", "WebViewPageViewCreated: ${arguments?.getString("URL")}")
         arguments?.getString("URL")?.let {
             webView.loadUrl(it)
         }
