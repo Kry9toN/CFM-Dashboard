@@ -10,6 +10,8 @@
 
 ```yaml
 tproxy-port: 7893  # 推荐值
+tun:
+  enable: false
 dns:
   enable: true
   listen: '0.0.0.0:1053'
@@ -32,9 +34,11 @@ dns:
 
 ```yaml
 #tproxy-port: 7893  # 建议注释掉，省电
-dns:
+tun:
   enable: true
   auto-route: false
+  auto-detect-interface: false  # 建议值
+dns:
   #listen: '0.0.0.0:1053'  # 建议注释掉，省电
 ```
 
@@ -53,10 +57,12 @@ dns:
 
 ```yaml
 #tproxy-port: 7893  # 建议注释掉，省电
-dns:
+tun:
   enable: true
   auto-route: true
-  #listen: '0.0.0.0:1053'  # 建议注释掉，省电
+  auto-detect-interface: true
+dns:
+  listen: '0.0.0.0:1053'  # 建议注释掉，省电
 ```
 
 ### 优势
