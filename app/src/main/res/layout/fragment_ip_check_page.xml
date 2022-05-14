@@ -7,20 +7,24 @@
     android:orientation="vertical"
     android:scrollbars="none"
     tools:context=".IpCheckPage">
-
-    <ScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/swipeView">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            style="@style/Default"
-            android:orientation="vertical">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/Default"
+                android:orientation="vertical">
 
-            <include layout="@layout/fragment_ip_check_page_ip"/>
+                <include layout="@layout/fragment_ip_check_page_ip"/>
 
-            <include layout="@layout/fragment_ip_cleck_page_web"/>
+                <include layout="@layout/fragment_ip_cleck_page_web"/>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
-    </ScrollView>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

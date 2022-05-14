@@ -64,6 +64,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     //mmkv
     implementation 'com.tencent:mmkv-static:1.2.13'
 

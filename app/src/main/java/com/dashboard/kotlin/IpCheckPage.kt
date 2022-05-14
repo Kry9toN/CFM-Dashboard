@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import kotlinx.android.synthetic.main.fragment_ip_check_page.*
 import kotlinx.android.synthetic.main.fragment_ip_check_page_ip.*
 import kotlinx.android.synthetic.main.fragment_ip_cleck_page_web.*
 import kotlinx.coroutines.*
@@ -15,7 +17,7 @@ import org.json.JSONObject
 import java.net.URL
 
 @DelicateCoroutinesApi
-class IpCheckPage : Fragment() {
+class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var coroutineScope: Job
     private lateinit var sukkAPiThreadContext: ExecutorCoroutineDispatcher
@@ -37,6 +39,15 @@ class IpCheckPage : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        startCheck()
+        super.onViewCreated(view, savedInstanceState)
+        swipeView.setOnRefreshListener(this)
+        Log.d("ViewCreated", "ipCheckPageViewCreated")
+    }
+
+    @OptIn(ObsoleteCoroutinesApi::class)
+    private fun startCheck() {
+        swipeView.isRefreshing = true
         sukkAPiThreadContext = newSingleThreadContext("sukkAPiThread")
         ipipNetThreadContext = newSingleThreadContext("ipipNetThread")
         ipSbApiThreadContext = newSingleThreadContext("ipSbApiThread")
@@ -48,7 +59,7 @@ class IpCheckPage : Fragment() {
 
         coroutineScope = lifecycleScope.launch(Dispatchers.IO) {
             launch(sukkAPiThreadContext) {
-                val tempStr: String = try {
+                val tempStr: String = runCatching {
                     val sukkaApiObj =
                         JSONObject(URL("https://forge.speedtest.cn/api/location/info").readText())
                     "${sukkaApiObj.optString("full_ip")}\n" +
@@ -57,37 +68,30 @@ class IpCheckPage : Fragment() {
                             "${sukkaApiObj.optString("city")} " +
                             "${sukkaApiObj.optString("distinct")} " +
                             sukkaApiObj.optString("isp")
-                } catch (ex: Exception) {
-                    "error"
-                }
+                }.getOrDefault("error")
 
                 withContext(Dispatchers.Main) {
                     runCatching {
                         sukka_api_result.text = tempStr
                     }
                 }
-
             }
 
 
             launch(ipipNetThreadContext) {
                 //IPIP.NET
-                var tempStr: String
-                try {
+                val tempStr = runCatching {
                     var ipipNetText = URL("https://myip.ipip.net").readText()
                     ipipNetText = ipipNetText.replace("当前 IP：", "")
                     ipipNetText = ipipNetText.replace("来自于：", "\n")
                     ipipNetText = ipipNetText.substring(0, ipipNetText.length - 1)
-                    tempStr = ipipNetText
-                } catch (ex: Exception) {
-                    tempStr = "error"
-                }
+                    ipipNetText
+                }.getOrDefault("error")
                 withContext(Dispatchers.Main) {
                     runCatching {
                         ipip_net_result.text = tempStr
                     }
                 }
-
             }
 
 
@@ -118,16 +122,18 @@ class IpCheckPage : Fragment() {
                     ipSkkRip = ipSkkRip.replace("\nts=", "")
                     ipSkkRip = ipSkkRip.replace("ip=", "")
 
-                    val conn = URL("https://qqwry.api.skk.moe/${ipSkkRip}").openConnection()
-                    conn.setRequestProperty("referer", "https://ip.skk.moe")
-                    conn.setRequestProperty(
-                        "user-agent",
-                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 " +
-                                "(KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36"
-                    )
-                    val ipSkkGeoIpObj = JSONObject(conn.getInputStream().reader().readText())
+                    runCatching {
+                        val conn = URL("https://qqwry.api.skk.moe/${ipSkkRip}").openConnection()
+                        conn.setRequestProperty("referer", "https://ip.skk.moe")
+                        conn.setRequestProperty(
+                            "user-agent",
+                            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 " +
+                                    "(KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36"
+                        )
+                        val ipSkkGeoIpObj = JSONObject(conn.getInputStream().reader().readText())
 
-                    "${ipSkkRip}\n" + ipSkkGeoIpObj.optString("geo")
+                        "${ipSkkRip}\n" + ipSkkGeoIpObj.optString("geo")
+                    }.getOrDefault(ipSkkRip)
 
                 }.getOrDefault("error")
                 withContext(Dispatchers.Main) {
@@ -151,9 +157,7 @@ class IpCheckPage : Fragment() {
                 withContext(Dispatchers.Main) {
                     runCatching {
                         val color = if (tempStr == "连接正常") ResourcesCompat.getColor(
-                            resources,
-                            R.color.green,
-                            context?.theme
+                            resources, R.color.green, context?.theme
                         ) else ResourcesCompat.getColor(resources, R.color.orange, context?.theme)
                         baiduCheck.text = tempStr
                         baiduCheck.setTextColor(color)
@@ -174,9 +178,7 @@ class IpCheckPage : Fragment() {
                 withContext(Dispatchers.Main) {
                     runCatching {
                         val color = if (tempStr == "连接正常") ResourcesCompat.getColor(
-                            resources,
-                            R.color.green,
-                            context?.theme
+                            resources, R.color.green, context?.theme
                         ) else ResourcesCompat.getColor(resources, R.color.orange, context?.theme)
                         neteaseMusicCheck.text = tempStr
                         neteaseMusicCheck.setTextColor(color)
@@ -197,9 +199,7 @@ class IpCheckPage : Fragment() {
                 withContext(Dispatchers.Main) {
                     runCatching {
                         val color = if (tempStr == "连接正常") ResourcesCompat.getColor(
-                            resources,
-                            R.color.green,
-                            context?.theme
+                            resources, R.color.green, context?.theme
                         ) else ResourcesCompat.getColor(resources, R.color.orange, context?.theme)
                         githubCheck.text = tempStr
                         githubCheck.setTextColor(color)
@@ -220,9 +220,7 @@ class IpCheckPage : Fragment() {
                 withContext(Dispatchers.Main) {
                     runCatching {
                         val color = if (tempStr == "连接正常") ResourcesCompat.getColor(
-                            resources,
-                            R.color.green,
-                            context?.theme
+                            resources, R.color.green, context?.theme
                         ) else ResourcesCompat.getColor(resources, R.color.orange, context?.theme)
                         youtubeCheck.text = tempStr
                         youtubeCheck.setTextColor(color)
@@ -230,11 +228,11 @@ class IpCheckPage : Fragment() {
                 }
 
             }
-
-
         }
-        super.onViewCreated(view, savedInstanceState)
-        Log.d("ViewCreated", "ipCheckPageViewCreated")
+        lifecycleScope.launch {
+            coroutineScope.join()
+            swipeView.isRefreshing = false
+        }
     }
 
     override fun onDestroyView() {
@@ -260,6 +258,18 @@ class IpCheckPage : Fragment() {
         }
         super.onDestroyView()
 
+    }
+
+    override fun onRefresh() {
+        sukka_api_result.text = ""
+        ipip_net_result.text = ""
+        ip_sb_result.text = ""
+        sukka_api_global_result.text = ""
+        baiduCheck.text = ""
+        neteaseMusicCheck.text = ""
+        githubCheck.text = ""
+        youtubeCheck.text = ""
+        startCheck()
     }
 
 }

@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".IpCheckPage">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
-        tools:context=".IpCheckPage">
-
-    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_height="wrap_content"
+        android:id="@+id/swipeView">
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
+            android:layout_marginBottom="18dp"
             android:orientation="horizontal">
 
-        <ScrollView
+            <ScrollView
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent">
 
-            <include layout="@layout/fragment_ip_check_page_ip" />
+                <include layout="@layout/fragment_ip_check_page_ip" />
 
-        </ScrollView>
+            </ScrollView>
 
-        <ScrollView
+            <ScrollView
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent">
 
-            <include layout="@layout/fragment_ip_cleck_page_web" />
+                <include layout="@layout/fragment_ip_cleck_page_web" />
 
-        </ScrollView>
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
+            </ScrollView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>
