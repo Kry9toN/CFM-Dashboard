@@ -37,14 +37,14 @@
                     style="@style/IpCheckDefaultCardText"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="从国内查询 (Sukka)"
+                    android:text="从国内查询 (SpeedTest)"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
             <TextView
                     style="@style/IpCheckDefaultCardText"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="数据来自 Sukka API"
+                    android:text="数据来自 speedtest.cn"
                     android:textAppearance="?attr/textAppearanceHeadline6"
                     android:textColor="#BDBDBD"
                     android:textSize="10sp" />
@@ -84,7 +84,7 @@
                     style="@style/IpCheckDefaultCardText"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="从国内查询 (搜狐)"
+                    android:text="从国内查询 (IPIP.net)"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
             <TextView
@@ -185,7 +185,7 @@
                     style="@style/IpCheckDefaultCardText"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="数据来自 skk.moe + 纯真 IP 数据库"
+                    android:text="数据来自 skk.moe + ipapi.co"
                     android:textAppearance="?attr/textAppearanceHeadline6"
                     android:textColor="#BDBDBD"
                     android:textSize="10sp" />

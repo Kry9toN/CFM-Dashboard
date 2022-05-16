@@ -100,10 +100,7 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 val tempStr = runCatching {
                     val ipsbObj = JSONObject(URL("https://api.ip.sb/geoip").readText())
                     "${ipsbObj.optString("ip")}\n" +
-                            "${ipsbObj.optString("country")} " +
-                            "${ipsbObj.optString("organization")} " +
-                            "${ipsbObj.optString("asn")} " +
-                            "${ipsbObj.optString("asn_organization")} "
+                            "${ipsbObj.optString("country_code")} ${ipsbObj.optString("organization")}"
                 }.getOrDefault("error")
                 withContext(Dispatchers.Main) {
                     runCatching {
@@ -123,8 +120,7 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     ipSkkRip = ipSkkRip.replace("ip=", "")
 
                     runCatching {
-                        val conn = URL("https://qqwry.api.skk.moe/${ipSkkRip}").openConnection()
-                        conn.setRequestProperty("referer", "https://ip.skk.moe")
+                        val conn = URL("https://ipapi.co/${ipSkkRip}/json/").openConnection()
                         conn.setRequestProperty(
                             "user-agent",
                             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 " +
@@ -132,7 +128,12 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         )
                         val ipSkkGeoIpObj = JSONObject(conn.getInputStream().reader().readText())
 
-                        "${ipSkkRip}\n" + ipSkkGeoIpObj.optString("geo")
+                        "${ipSkkRip}\n${ipSkkGeoIpObj.optString("country_code")} " +
+                                "${ipSkkGeoIpObj.optString("region")} " +
+                                "${ipSkkGeoIpObj.optString("city")} " +
+                                "${ipSkkGeoIpObj.optString("org")} "
+                    }.onFailure {
+                        Log.e("TAG", "startCheck: $it", )
                     }.getOrDefault(ipSkkRip)
 
                 }.getOrDefault("error")
