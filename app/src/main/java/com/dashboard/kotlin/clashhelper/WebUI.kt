@@ -9,7 +9,7 @@ enum class WebUI {
         override var url = "${ClashConfig.baseURL}/ui/"
     },
     META {
-        override var url = "https://metacubex.github.io/clash-dashboard/"
+        override var url = "https://clash.metacubex.one/"
     },
     YACD {
         override var url = "https://yacd.haishan.me/"
