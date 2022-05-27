@@ -2,13 +2,9 @@ package com.dashboard.kotlin
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.text.InputFilter
-import android.text.Spanned
-import android.text.method.DigitsKeyListener
 import android.util.Log
 import android.view.*
 import android.webkit.WebView
@@ -297,10 +293,10 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
             setView(LinearLayout(context).also { ll ->
                 val edit = EditText(context).also {
                     it.visibility = View.GONE
-                    it.setText(WebUI.OTHER.url)
+                    it.setText(WebUI.Other.url)
                     it.setSingleLine()
                     it.addTextChangedListener { text ->
-                        WebUI.OTHER.url = text.toString()
+                        WebUI.Other.url = text.toString()
                     }
                 }
                 ll.orientation = LinearLayout.VERTICAL
@@ -322,14 +318,14 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
                                                         index: Int, id: Long
                             ) {
                                 KV.putString("DB_NAME", (v as TextView).text.toString())
-                                if (v.text == WebUI.OTHER.name)
+                                if (v.text == WebUI.Other.name)
                                     edit.visibility = View.VISIBLE
                                 else
                                     edit.visibility = View.GONE
                             }
 
                             override fun onNothingSelected(p0: AdapterView<*>) {
-                                KV.putString("DB_NAME", WebUI.LOCAL.name)
+                                KV.putString("DB_NAME", WebUI.Local.name)
                             }
                         }
                     }

@@ -5,19 +5,22 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 
 enum class WebUI {
     @DelicateCoroutinesApi
-    LOCAL {
+    Local {
         override var url = "${ClashConfig.baseURL}/ui/"
     },
-    META {
+    `Meta-Yacd` {
+        override var url = "https://yacd.metacubex.one"
+    },
+    `Meta-Razord` {
         override var url = "https://clash.metacubex.one/"
     },
-    YACD {
+    Yacd {
         override var url = "https://yacd.haishan.me/"
     },
-    RAZORD{
+    Razord {
         override var url = "https://clash.razord.top/"
     },
-    OTHER {
+    Other {
         override var url
             get() = KV.getString("Web_UI_Other", "")!!
             set(value) {
