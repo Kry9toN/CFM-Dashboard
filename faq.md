@@ -72,7 +72,7 @@ bin_path=/data/adb/modules/Clash_For_Magisk/system/bin/clash
 6. 使用`ss -h`判断手机有无ss命令
 
 * 有： 群里提问尝试解决
-* 无： 改`${script_dir}/clash.tool`162行(魔改2为180行)改`sleep *`**(\*为任意数字)**为**`exit 0`**
+* 无： 改`${script_dir}/clash.tool`162行(魔改2为246行)改`sleep *`**(\*为任意数字)**为**`exit 0`**
 
 ![问题3](.gitbook/assets/d5d2f71116d7c57b86d3f.png)
 
