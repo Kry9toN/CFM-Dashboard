@@ -22,7 +22,7 @@
 
 `fake-ip`[原理](https://blog.skk.moe/post/what-happend-to-dns-in-proxy/)
 
-若更改`enhanced-mode`为`fake-ip`(可配置[fake-ip-filter](https://github.com/Dreamacro/clash/wiki/configuration#user-content-all-configuration-options:\~:text=%23%20Hostnames%20in%20this%20list%20will,%23%20%20%20%2D%20localhost.ptlogin2.qq.com)以期解决WiFi验证问题), 请将`clash.config`文件`reserved_ip`字符串中的`198.18.0.0/15`**删除**!!!!!
+若更改`enhanced-mode`为`fake-ip`(可配置[fake-ip-filter](https://github.com/Dreamacro/clash/wiki/configuration#user-content-all-configuration-options)以期解决WiFi验证问题), 请将`clash.config`文件`reserved_ip`字符串中的`198.18.0.0/15`**删除**!!!!!
 
 同理更改`enhanced-mode`为`redir-host`就把`198.18.0.0/15`**`加回`**
 
@@ -41,6 +41,8 @@
 ### 单机场（如需定制规则，不推荐这种方法） <a href="#undefined" id="undefined"></a>
 
 请打开模块默认配置目录下的`clash.config`文件, 将`auto_subscription`（魔改2为`auto_updateSubcript`）的值改为`true`并在`subscription_url`后填写你的clash订阅地址. 模块默认每天凌晨两点更新订阅, 你可以通过查看Clash配置目录下的`run`文件夹里的`run.logs`日志文件查看订阅是否更新成功(或查看相关文件时间戳), 如需更改自动订阅的时间, 可更改`update_interval`的值, 请自行学习[Crontab](https://en.wikipedia.org/wiki/Cron)相关内容。
+
+* 注意：首次使用需要自己下载一份配置文件替换config.yaml
 
 ## 你也可以手动更新 <a href="#undefined" id="undefined"></a>
 
