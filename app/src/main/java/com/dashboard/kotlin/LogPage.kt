@@ -2,6 +2,8 @@ package com.dashboard.kotlin
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Html
+import android.text.Spanned
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -55,7 +57,7 @@ class LogPage : Fragment() {
         readLogScope = lifecycleScope.launch(Dispatchers.IO) {
             val clashV = Shell.cmd("${ClashConfig.corePath} -v").exec().out.last()
             withContext(Dispatchers.Main){
-                log_cat.text = "$clashV\n${readLog()}"
+                log_cat.text = formatLog("$clashV\n${readLog()}")
             }
             while (true){
                 if (ClashStatus.isCmdRunning){
@@ -67,7 +69,7 @@ class LogPage : Fragment() {
                 if (flag) continue
                 withContext(Dispatchers.Main){
                     runCatching {
-                        log_cat.text = "$clashV\n${readLog()}"
+                        log_cat.text = formatLog("$clashV\n${readLog()}")
                         scrollView.fullScroll(ScrollView.FOCUS_DOWN)
                     }
                 }
@@ -79,5 +81,34 @@ class LogPage : Fragment() {
         val lst = mutableListOf<String>()
         job.to(lst).exec()
         return lst.joinToString("\n")
+    }
+
+    companion object {
+        private val reLog = Regex("(\\[.+])(.{3,4}): (.+)")
+        private val levelToColor = mapOf(
+            Pair("info", "#58C3F2"),
+            Pair("warn", "#CC5ABB"),
+            Pair("err", "#C11C1C"),
+        )
+
+        private fun formatLog(log: String): Spanned {
+            val rstr = StringBuilder()
+            log.split("\n").forEach { line ->
+                val rl = reLog.find(line)
+                if (rl == null) {
+                    rstr.append("$line<br/>")
+                    return@forEach
+                }
+
+                rl.groupValues.let {
+                    rstr.append("<span style='color:#fb923c'>${it[1]}</span>" +
+                            "<span style='color:${levelToColor[it[2]]}'><strong>${it[2]}</strong></span>" +
+                            "<span> ${it[3]}</span><br/>")
+                }
+
+            }
+
+            return Html.fromHtml(rstr.toString())
+        }
     }
 }
