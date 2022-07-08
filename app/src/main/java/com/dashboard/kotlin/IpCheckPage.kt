@@ -144,43 +144,45 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
             }
 
-
+            // 下
             launch(baiduCheckThreadContext) {
                 val tempStr = runCatching {
                     val conn = URL("https://baidu.com/").openConnection()
                     conn.connectTimeout = 1000 * 10
                     conn.readTimeout = 1000 * 10
+                    val start = System.currentTimeMillis()
                     if (conn.getInputStream().reader().readText() != "")
-                        "连接正常"
+                        "${System.currentTimeMillis() - start}ms"
                     else
                         "无法访问"
                 }.getOrDefault("无法访问")
                 withContext(Dispatchers.Main) {
                     runCatching {
-                        val color = if (tempStr == "连接正常") ResourcesCompat.getColor(
-                            resources, R.color.green, context?.theme
-                        ) else ResourcesCompat.getColor(resources, R.color.orange, context?.theme)
+                        val color = if (tempStr == "无法访问") ResourcesCompat.getColor(
+                            resources, R.color.orange, context?.theme
+                        ) else ResourcesCompat.getColor(resources, R.color.green, context?.theme)
                         baiduCheck.text = tempStr
                         baiduCheck.setTextColor(color)
                     }
                 }
-
             }
+
             launch(netEaseCheckThreadContext) {
                 val tempStr = runCatching {
                     val conn = URL("https://music.163.com/").openConnection()
                     conn.connectTimeout = 1000 * 10
                     conn.readTimeout = 1000 * 10
+                    val start = System.currentTimeMillis()
                     if (conn.getInputStream().reader().readText() != "")
-                        "连接正常"
+                        "${System.currentTimeMillis() - start}ms"
                     else
                         "无法访问"
                 }.getOrDefault("无法访问")
                 withContext(Dispatchers.Main) {
                     runCatching {
-                        val color = if (tempStr == "连接正常") ResourcesCompat.getColor(
-                            resources, R.color.green, context?.theme
-                        ) else ResourcesCompat.getColor(resources, R.color.orange, context?.theme)
+                        val color = if (tempStr == "无法访问") ResourcesCompat.getColor(
+                            resources, R.color.orange, context?.theme
+                        ) else ResourcesCompat.getColor(resources, R.color.green, context?.theme)
                         neteaseMusicCheck.text = tempStr
                         neteaseMusicCheck.setTextColor(color)
                     }
@@ -192,16 +194,17 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     val conn = URL("https://github.com/").openConnection()
                     conn.connectTimeout = 1000 * 10
                     conn.readTimeout = 1000 * 10
+                    val start = System.currentTimeMillis()
                     if (conn.getInputStream().reader().readText() != "")
-                        "连接正常"
+                        "${System.currentTimeMillis() - start}ms"
                     else
                         "无法访问"
                 }.getOrDefault("无法访问")
                 withContext(Dispatchers.Main) {
                     runCatching {
-                        val color = if (tempStr == "连接正常") ResourcesCompat.getColor(
-                            resources, R.color.green, context?.theme
-                        ) else ResourcesCompat.getColor(resources, R.color.orange, context?.theme)
+                        val color = if (tempStr == "无法访问") ResourcesCompat.getColor(
+                            resources, R.color.orange, context?.theme
+                        ) else ResourcesCompat.getColor(resources, R.color.green, context?.theme)
                         githubCheck.text = tempStr
                         githubCheck.setTextColor(color)
                     }
@@ -213,16 +216,17 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     val conn = URL("https://www.youtube.com/").openConnection()
                     conn.connectTimeout = 1000 * 10
                     conn.readTimeout = 1000 * 10
+                    val start = System.currentTimeMillis()
                     if (conn.getInputStream().reader().readText() != "")
-                        "连接正常"
+                        "${System.currentTimeMillis() - start}ms"
                     else
                         "无法访问"
                 }.getOrDefault("无法访问")
                 withContext(Dispatchers.Main) {
                     runCatching {
-                        val color = if (tempStr == "连接正常") ResourcesCompat.getColor(
-                            resources, R.color.green, context?.theme
-                        ) else ResourcesCompat.getColor(resources, R.color.orange, context?.theme)
+                        val color = if (tempStr == "无法访问") ResourcesCompat.getColor(
+                            resources, R.color.orange, context?.theme
+                        ) else ResourcesCompat.getColor(resources, R.color.green, context?.theme)
                         youtubeCheck.text = tempStr
                         youtubeCheck.setTextColor(color)
                     }
