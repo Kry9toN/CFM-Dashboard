@@ -48,6 +48,9 @@ object ClashConfig {
     val logPath
         get() = "${dataPath}/run/run.log"
 
+    val logKernelPath
+        get() = "${dataPath}/run/kernel.log"
+
     val pidPath
         get() = "${dataPath}/run/clash.pid"
 
