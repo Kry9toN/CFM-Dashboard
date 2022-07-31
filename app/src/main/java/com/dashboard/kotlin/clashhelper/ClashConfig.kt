@@ -45,6 +45,9 @@ object ClashConfig {
     val mergedConfigPath
         get() = "${dataPath}/config/config.yaml"
 
+    val configDirPath
+        get() = "${dataPath}/config"
+
     val logPath
         get() = "${dataPath}/run/run.log"
 
@@ -88,7 +91,7 @@ object ClashConfig {
             callBack("Penggabungan gagal")
             return
         }
-        if (Shell.cmd("$corePath -d $dataPath -f $mergedConfigPath -t > /dev/null").exec().isSuccess)
+        if (Shell.cmd("$corePath -d $configDirPath -f $mergedConfigPath -t > /dev/null").exec().isSuccess)
             updateConfigNet(mergedConfigPath, callBack)
         else
             callBack("File konfigurasi salah")
