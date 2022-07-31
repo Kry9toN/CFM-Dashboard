@@ -75,7 +75,7 @@ object ClashConfig {
                     .exec()
                     .isSuccess
             ) {
-                callBack("配置莫得变化")
+                callBack("Tidak ada perubahan pada konfigurasi")
                 return
             } else {
                 val cmd = Shell.cmd("cp -f '$GExternalCacheDir/config_output.yaml' '$mergedConfigPath'").exec()
@@ -85,13 +85,13 @@ object ClashConfig {
                 }
             }
         }.onFailure {
-            callBack("合并失败啦")
+            callBack("Penggabungan gagal")
             return
         }
         if (Shell.cmd("$corePath -d $dataPath -f $mergedConfigPath -t > /dev/null").exec().isSuccess)
             updateConfigNet(mergedConfigPath, callBack)
         else
-            callBack("配置文件有误唉")
+            callBack("File konfigurasi salah")
     }
 
     private fun updateConfigNet(configPath: String, callBack: (r: String) -> Unit) {
@@ -123,14 +123,14 @@ object ClashConfig {
                 withContext(Dispatchers.Main){
                     when (conn.responseCode){
                         204 ->
-                            callBack("配置更新成功啦")
+                            callBack("Pembaruan konfigurasi berhasil")
                         else ->
-                            callBack("更新失败咯，状态码：${conn.responseCode}")
+                            callBack("Pembaruan gagal, kode status：${conn.responseCode}")
                     }
                 }
             } catch (ex: Exception) {
                 withContext(Dispatchers.Main){
-                    callBack("IO操作出错，你是不是没给俺网络权限")
+                    callBack("Kesalahan operasi IO, apakah Anda tidak memberi saya izin jaringan?")
                 }
                 Log.w("NET", ex.toString())
             }
