@@ -43,7 +43,7 @@ object ClashConfig {
     }
 
     val mergedConfigPath
-        get() = "${dataPath}/run/config.yaml"
+        get() = "${dataPath}/config/config.yaml"
 
     val logPath
         get() = "${dataPath}/run/run.log"
