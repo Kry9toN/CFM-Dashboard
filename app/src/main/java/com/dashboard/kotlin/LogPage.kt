@@ -55,9 +55,8 @@ class LogPage : Fragment() {
             false
         }
         readLogScope = lifecycleScope.launch(Dispatchers.IO) {
-            val clashV = Shell.cmd("${ClashConfig.corePath} -v").exec().out.last()
             withContext(Dispatchers.Main){
-                log_cat.text = formatLog("$clashV\n${readLog()}")
+                log_cat.text = formatLog(readLog())
             }
             while (true){
                 if (ClashStatus.isCmdRunning){
@@ -69,7 +68,7 @@ class LogPage : Fragment() {
                 if (flag) continue
                 withContext(Dispatchers.Main){
                     runCatching {
-                        log_cat.text = formatLog("$clashV\n${readLog()}")
+                        log_cat.text = formatLog(readLog())
                         scrollView.fullScroll(ScrollView.FOCUS_DOWN)
                     }
                 }
