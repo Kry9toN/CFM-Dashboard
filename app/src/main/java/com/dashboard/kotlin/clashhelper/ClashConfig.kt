@@ -54,9 +54,6 @@ object ClashConfig {
     val pidPath
         get() = "${dataPath}/run/clash.pid"
 
-    val configPath
-        get() = "${dataPath}/config.yaml"
-
     val baseURL by lazy {
         "http://${getExternalController()}"
     }
@@ -141,17 +138,14 @@ object ClashConfig {
     }
 
     private fun mergeConfig(outputFileName: String) {
-        //copyFile(clashDataPath, "config.yaml")
         copyFile("${dataPath}/config", "_template")
-        Shell.cmd(
-            "sed -n -E '/^proxies:.*\$/,\$p' $configPath> $GExternalCacheDir/config.yaml"
-        ).exec()
+        copyFile("${dataPath}/config", "_proxies")
         mergeFile(
             "$GExternalCacheDir/_template",
-            "$GExternalCacheDir/config.yaml",
+            "$GExternalCacheDir/_proxies",
             "$GExternalCacheDir/$outputFileName"
         )
-        deleteFile(GExternalCacheDir, "config.yaml")
+        deleteFile(GExternalCacheDir, "_template")
         Log.e("TAG", "mergeConfig: $GExternalCacheDir", )
     }
 
