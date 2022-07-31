@@ -20,33 +20,33 @@ object ClashConfig {
         setTemplate()
         paths = Shell.cmd(
             "mkdir -p $dataPath/run",
-             "cp -f $dataPath/clash.config $dataPath/run/c.cfg",
-            " echo '\necho \"\${Clash_bin_path};\${Clash_scripts_dir};\"' >> $dataPath/run/c.cfg",
+            "cp -f $dataPath/script/path.sc $dataPath/run/c.cfg",
+            "echo '\necho \"\${CLASH_BIN_PATH};\${CLASH_CONFIG_DIR};\"' >> $dataPath/run/c.cfg",
             "$dataPath/run/c.cfg"
         ).exec().out.last().split(';')
         Shell.cmd("rm -f $dataPath/run/c.cfg").submit()
     }
 
     val dataPath
-        get() = "/data/clash"
+        get() = "/data/adb/clash"
 
     val corePath by lazy {
         runCatching {
             if (paths[0] == "") throw Error() else paths[0]
-        }.getOrDefault("/data/adb/modules/Clash_For_Magisk/system/bin/clash")
+        }.getOrDefault("${dataPath}/core/clash")
     }
 
     val scriptsPath by lazy {
         runCatching {
             if (paths[1] == "") throw Error() else paths[1]
-        }.getOrDefault( "/data/clash/scripts")
+        }.getOrDefault( "${dataPath}/scripts")
     }
 
     val mergedConfigPath
         get() = "${dataPath}/run/config.yaml"
 
     val logPath
-        get() = "${dataPath}/run/run.logs"
+        get() = "${dataPath}/run/run.log"
 
     val pidPath
         get() = "${dataPath}/run/clash.pid"
@@ -59,11 +59,11 @@ object ClashConfig {
     }
 
     val dashBoard by  lazy {
-        getFromFile("$GExternalCacheDir/template", arrayOf("external-ui"))
+        getFromFile("$GExternalCacheDir/_template", arrayOf("external-ui"))
     }
 
     val secret by lazy {
-        getFromFile("$GExternalCacheDir/template", arrayOf("secret"))
+        getFromFile("$GExternalCacheDir/_template", arrayOf("secret"))
     }
 
     fun updateConfig(callBack: (r: String) -> Unit) {
@@ -139,12 +139,12 @@ object ClashConfig {
 
     private fun mergeConfig(outputFileName: String) {
         //copyFile(clashDataPath, "config.yaml")
-        copyFile(dataPath, "template")
+        copyFile("${dataPath}/config", "_template")
         Shell.cmd(
             "sed -n -E '/^proxies:.*\$/,\$p' $configPath> $GExternalCacheDir/config.yaml"
         ).exec()
         mergeFile(
-            "$GExternalCacheDir/template",
+            "$GExternalCacheDir/_template",
             "$GExternalCacheDir/config.yaml",
             "$GExternalCacheDir/$outputFileName"
         )
@@ -154,7 +154,7 @@ object ClashConfig {
 
     private fun getExternalController(): String {
 
-        val temp = getFromFile("$GExternalCacheDir/template", arrayOf("external-controller"))
+        val temp = getFromFile("$GExternalCacheDir/_template", arrayOf("external-controller"))
 
         return when {
             temp.trim() == "" -> "127.0.0.1:9090"
@@ -162,8 +162,6 @@ object ClashConfig {
             else -> temp
         }
     }
-
-
 
     private fun setFileNR(dirPath: String, fileName: String, func: (file: String) -> Unit) {
         copyFile(dirPath, fileName)
@@ -192,5 +190,5 @@ object ClashConfig {
         outputFilePath: String
     )
 
-    private fun setTemplate() = copyFile(dataPath, "template")
+    private fun setTemplate() = copyFile("${dataPath}/config", "_template")
 }
