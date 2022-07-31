@@ -7,7 +7,7 @@
     <string name="clash_disable">Clash has stopped</string>
     <string name="clash_charging">Command is executing</string>
     <string name="sui_disable">Root permission not granted\nPlease use Sui or Magisk authorization</string>
-    <string name="netspeed_status_text">Upload %s Download %s\nRES %s CPU %s</string>
+    <string name="netspeed_status_text">Up %s Down %s\nRES %s CPU %s</string>
     <string name="menu_update_geox">Update GeoX</string>
     <string name="menu_update_config">Hot update configuration</string>
     <string name="large_text">
