@@ -266,9 +266,9 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
             R.id.menu_update_geox -> {
                 when{
                     !Shell.cmd("su -c 'exit'").exec().isSuccess ->
-                        Toast.makeText(context, "莫得权限呢", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Apakah Anda memiliki izin?", Toast.LENGTH_SHORT).show()
                     ClashStatus.isCmdRunning ->
-                        Toast.makeText(context, "现在不可以哦", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Tidak sekarang", Toast.LENGTH_SHORT).show()
                     else -> ClashStatus.updateGeox()
                 }
                 true
@@ -280,7 +280,7 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
                             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                         }
                     else
-                        Toast.makeText(context, "Clash没启动呢", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Clash tidak dimulai", Toast.LENGTH_SHORT).show()
                 }
                 true
             }
@@ -289,7 +289,7 @@ class MainPage : Fragment(), androidx.appcompat.widget.Toolbar.OnMenuItemClickLi
 
     override fun onLongClick(p0: View?): Boolean {
         AlertDialog.Builder(context).apply {
-            setTitle("选择Web面板")
+            setTitle("Pilih Panel Web")
             setView(LinearLayout(context).also { ll ->
                 val edit = EditText(context).also {
                     it.visibility = View.GONE
