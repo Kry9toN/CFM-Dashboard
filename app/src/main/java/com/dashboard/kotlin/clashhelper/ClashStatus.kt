@@ -124,7 +124,7 @@ object ClashStatus {
         if (isCmdRunning) return
         isCmdRunning = true
         Shell.cmd(
-            "${ClashConfig.scriptsPath}/clash.service -s && ${ClashConfig.scriptsPath}/clash.iptables -s"
+            "${ClashConfig.scriptsPath}/clash.service -s && ${ClashConfig.scriptsPath}/clash.tproxy -s"
         ).submit{
             isCmdRunning = false
         }
@@ -135,7 +135,7 @@ object ClashStatus {
         isCmdRunning = true
         Shell.cmd(
             "${ClashConfig.scriptsPath}/clash.service -k",
-            "${ClashConfig.scriptsPath}/clash.iptables -k"
+            "${ClashConfig.scriptsPath}/clash.tproxy -k"
         ).submit{
             isCmdRunning = false
         }
