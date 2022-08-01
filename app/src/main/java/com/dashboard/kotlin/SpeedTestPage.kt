@@ -25,7 +25,7 @@ class SpeedTestPage : Fragment() {
         viewPager.adapter = object: FragmentStateAdapter(this){
 
             val urls = arrayListOf(
-                "https://fast.com/zh/cn/",
+                "https://fast.com/id/",
                 "https://speed.cloudflare.com/",
                 "https://www.speedtest.net/"
             )
