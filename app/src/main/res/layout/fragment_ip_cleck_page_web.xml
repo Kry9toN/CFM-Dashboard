@@ -12,7 +12,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="网站访问检测"
+            android:text="Deteksi akses situs web"
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -41,14 +41,14 @@
                         style="@style/IpCheckDefaultCardText"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="百度搜索"
+                        android:text="Pencarian Baidu"
                         android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <TextView
                         style="@style/IpCheckDefaultCardText"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="国内网站"
+                        android:text="Situs web domestik"
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         android:textColor="#BDBDBD"
                         android:textSize="10sp" />
@@ -89,14 +89,14 @@
                         style="@style/IpCheckDefaultCardText"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="网易云音乐"
+                        android:text="NetEase Cloud Music"
                         android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <TextView
                         style="@style/IpCheckDefaultCardText"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="国内网站"
+                        android:text="Situs web domestik"
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         android:textColor="#BDBDBD"
                         android:textSize="10sp" />
@@ -153,7 +153,7 @@
                         style="@style/IpCheckDefaultCardText"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="国外网站"
+                        android:text="Situs web luar negeri"
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         android:textColor="#BDBDBD"
                         android:textSize="10sp" />
@@ -201,7 +201,7 @@
                         style="@style/IpCheckDefaultCardText"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="海外网站"
+                        android:text="Situs web luar negeri"
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         android:textColor="#BDBDBD"
                         android:textSize="10sp" />
