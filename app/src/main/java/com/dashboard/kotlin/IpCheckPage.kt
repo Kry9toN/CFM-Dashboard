@@ -82,8 +82,8 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 //IPIP.NET
                 val tempStr = runCatching {
                     var ipipNetText = URL("https://myip.ipip.net").readText()
-                    ipipNetText = ipipNetText.replace("当前 IP：", "")
-                    ipipNetText = ipipNetText.replace("来自于：", "\n")
+                    ipipNetText = ipipNetText.replace("IP：", "")
+                    ipipNetText = ipipNetText.replace("Dari：", "\n")
                     ipipNetText = ipipNetText.substring(0, ipipNetText.length - 1)
                     ipipNetText
                 }.getOrDefault("error")
@@ -154,11 +154,11 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     if (conn.getInputStream().reader().readText() != "")
                         "${System.currentTimeMillis() - start}ms"
                     else
-                        "无法访问"
-                }.getOrDefault("无法访问")
+                        "Tidak dapat diakses"
+                }.getOrDefault("Tidak dapat diakses")
                 withContext(Dispatchers.Main) {
                     runCatching {
-                        val color = if (tempStr == "无法访问") ResourcesCompat.getColor(
+                        val color = if (tempStr == "Tidak dapat diakses") ResourcesCompat.getColor(
                             resources, R.color.orange, context?.theme
                         ) else ResourcesCompat.getColor(resources, R.color.green, context?.theme)
                         baiduCheck.text = tempStr
@@ -176,11 +176,11 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     if (conn.getInputStream().reader().readText() != "")
                         "${System.currentTimeMillis() - start}ms"
                     else
-                        "无法访问"
-                }.getOrDefault("无法访问")
+                        "Tidak dapat diakses"
+                }.getOrDefault("Tidak dapat diakses")
                 withContext(Dispatchers.Main) {
                     runCatching {
-                        val color = if (tempStr == "无法访问") ResourcesCompat.getColor(
+                        val color = if (tempStr == "Tidak dapat diakses") ResourcesCompat.getColor(
                             resources, R.color.orange, context?.theme
                         ) else ResourcesCompat.getColor(resources, R.color.green, context?.theme)
                         neteaseMusicCheck.text = tempStr
@@ -198,11 +198,11 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     if (conn.getInputStream().reader().readText() != "")
                         "${System.currentTimeMillis() - start}ms"
                     else
-                        "无法访问"
-                }.getOrDefault("无法访问")
+                        "Tidak dapat diakses"
+                }.getOrDefault("Tidak dapat diakses")
                 withContext(Dispatchers.Main) {
                     runCatching {
-                        val color = if (tempStr == "无法访问") ResourcesCompat.getColor(
+                        val color = if (tempStr == "Tidak dapat diakses") ResourcesCompat.getColor(
                             resources, R.color.orange, context?.theme
                         ) else ResourcesCompat.getColor(resources, R.color.green, context?.theme)
                         githubCheck.text = tempStr
@@ -220,11 +220,11 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     if (conn.getInputStream().reader().readText() != "")
                         "${System.currentTimeMillis() - start}ms"
                     else
-                        "无法访问"
-                }.getOrDefault("无法访问")
+                        "Tidak dapat diakses"
+                }.getOrDefault("Tidak dapat diakses")
                 withContext(Dispatchers.Main) {
                     runCatching {
-                        val color = if (tempStr == "无法访问") ResourcesCompat.getColor(
+                        val color = if (tempStr == "Tidak dapat diakses") ResourcesCompat.getColor(
                             resources, R.color.orange, context?.theme
                         ) else ResourcesCompat.getColor(resources, R.color.green, context?.theme)
                         youtubeCheck.text = tempStr
