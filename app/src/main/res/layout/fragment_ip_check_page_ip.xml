@@ -12,14 +12,10 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="IP 地址查询"
+            android:text="IP Address"
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:textSize="25sp"
             android:textStyle="bold" />
-
-
-
-
 
     <com.google.android.material.card.MaterialCardView
             style="@style/DefaultCard"
@@ -37,14 +33,14 @@
                     style="@style/IpCheckDefaultCardText"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="从国内查询 (SpeedTest)"
+                    android:text="SpeedTest"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
             <TextView
                     style="@style/IpCheckDefaultCardText"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="数据来自 speedtest.cn"
+                    android:text="Data dari speedtest.cn"
                     android:textAppearance="?attr/textAppearanceHeadline6"
                     android:textColor="#BDBDBD"
                     android:textSize="10sp" />
@@ -84,14 +80,14 @@
                     style="@style/IpCheckDefaultCardText"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="从国内查询 (IPIP.net)"
+                    android:text="IPIP.net"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
             <TextView
                     style="@style/IpCheckDefaultCardText"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="数据来自 IPIP.net"
+                    android:text="Dara dari IPIP.net"
                     android:textAppearance="?attr/textAppearanceHeadline6"
                     android:textColor="#BDBDBD"
                     android:textSize="10sp" />
@@ -131,14 +127,14 @@
                     style="@style/IpCheckDefaultCardText"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="从国外查询 (IP.SB)"
+                    android:text="IP.SB"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
             <TextView
                     style="@style/IpCheckDefaultCardText"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="数据来自 IP.SB"
+                    android:text="Data dari IP.SB"
                     android:textAppearance="?attr/textAppearanceHeadline6"
                     android:textColor="#BDBDBD"
                     android:textSize="10sp" />
@@ -178,14 +174,14 @@
                     style="@style/IpCheckDefaultCardText"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="从国外查询 (Sukka API)"
+                    android:text="Sukka API"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
             <TextView
                     style="@style/IpCheckDefaultCardText"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="数据来自 skk.moe + ipapi.co"
+                    android:text="Data dari skk.moe + ipapi.co"
                     android:textAppearance="?attr/textAppearanceHeadline6"
                     android:textColor="#BDBDBD"
                     android:textSize="10sp" />
