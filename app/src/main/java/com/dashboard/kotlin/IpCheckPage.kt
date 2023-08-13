@@ -24,8 +24,8 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var ipipNetThreadContext: ExecutorCoroutineDispatcher
     private lateinit var ipSbApiThreadContext: ExecutorCoroutineDispatcher
     private lateinit var sukkaGlobalThreadContext: ExecutorCoroutineDispatcher
-    private lateinit var baiduCheckThreadContext: ExecutorCoroutineDispatcher
-    private lateinit var netEaseCheckThreadContext: ExecutorCoroutineDispatcher
+    private lateinit var googleCheckThreadContext: ExecutorCoroutineDispatcher
+    private lateinit var whatsappCheckThreadContext: ExecutorCoroutineDispatcher
     private lateinit var githubCheckThreadContext: ExecutorCoroutineDispatcher
     private lateinit var youtubeCheckThreadContext: ExecutorCoroutineDispatcher
 
@@ -52,8 +52,8 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         ipipNetThreadContext = newSingleThreadContext("ipipNetThread")
         ipSbApiThreadContext = newSingleThreadContext("ipSbApiThread")
         sukkaGlobalThreadContext = newSingleThreadContext("sukkaGlobalThread")
-        baiduCheckThreadContext = newSingleThreadContext("baiduCheckThread")
-        netEaseCheckThreadContext = newSingleThreadContext("netEaseCheckThread")
+        googleCheckThreadContext = newSingleThreadContext("googleCheckThread")
+        whatsappCheckThreadContext = newSingleThreadContext("whatsappCheckThread")
         githubCheckThreadContext = newSingleThreadContext("githubCheckThread")
         youtubeCheckThreadContext = newSingleThreadContext("youtubeCheckThread")
 
@@ -145,9 +145,9 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
             // 下
-            launch(baiduCheckThreadContext) {
+            launch(googleCheckThreadContext) {
                 val tempStr = runCatching {
-                    val conn = URL("https://baidu.com/").openConnection()
+                    val conn = URL("https://google.com/").openConnection()
                     conn.connectTimeout = 1000 * 10
                     conn.readTimeout = 1000 * 10
                     val start = System.currentTimeMillis()
@@ -167,9 +167,9 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
             }
 
-            launch(netEaseCheckThreadContext) {
+            launch(whatsappCheckThreadContext) {
                 val tempStr = runCatching {
-                    val conn = URL("https://music.163.com/").openConnection()
+                    val conn = URL("https://www.whatsapp.com/").openConnection()
                     conn.connectTimeout = 1000 * 10
                     conn.readTimeout = 1000 * 10
                     val start = System.currentTimeMillis()
@@ -246,8 +246,8 @@ class IpCheckPage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             ipipNetThreadContext.close()
             ipSbApiThreadContext.close()
             sukkaGlobalThreadContext.close()
-            baiduCheckThreadContext.close()
-            netEaseCheckThreadContext.close()
+            googleCheckThreadContext.close()
+            whatsappCheckThreadContext.close()
             githubCheckThreadContext.close()
             youtubeCheckThreadContext.close()
 
