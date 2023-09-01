@@ -28,7 +28,7 @@ jobs:
           echo storePassword='${{ secrets.KEY_STORE_PASSWORD }}' >> local.properties
           echo keyAlias='${{ secrets.ALIAS }}' >> local.properties
           echo keyPassword='${{ secrets.ALIAS_KEY_PASSWORD }}' >> local.properties
-          echo fileDir='../key.jks' >> local.properties
+          echo storeFile='../key.jks' >> local.properties
           echo '${{ secrets.SIGNING_KEY_BASE64 }}' | base64 --decode > key.jks
 
       - name: Cache Gradle Dependencies
