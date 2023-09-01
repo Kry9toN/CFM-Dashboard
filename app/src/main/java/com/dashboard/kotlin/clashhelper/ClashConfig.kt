@@ -68,6 +68,7 @@ object ClashConfig {
 
     fun updateConfig(callBack: (r: String) -> Unit) {
         runCatching {
+            deleteFile(GExternalCacheDir, "config_output.yaml")
             mergeConfig("config_output.yaml")
 
             if (Shell
