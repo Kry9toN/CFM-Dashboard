@@ -7,6 +7,11 @@ plugins {
 def gitCommitCount = "git rev-list HEAD --count".execute().text.trim()
 def gitCommitHash = "git rev-parse --verify --short HEAD".execute().text.trim()
 
+Properties properties = new Properties()
+if (project.rootProject.file("local.properties").exists()) {
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+}
+
 android {
     compileSdkVersion 32
     buildToolsVersion "30.0.3"
@@ -37,8 +42,18 @@ android {
         }
     }
 
+    signingConfigs {
+        sign {
+            storeFile properties.getProperty("storeFile") != null ? file(properties.getProperty("storeFile")) : android.signingConfigs.debug.storeFile
+            storePassword properties.getProperty("storePassword", android.signingConfigs.debug.storePassword)
+            keyAlias properties.getProperty("keyAlias", android.signingConfigs.debug.keyAlias)
+            keyPassword properties.getProperty("keyPassword", android.signingConfigs.debug.keyPassword)
+        }
+    }
+    
     buildTypes {
         release {
+            signingConfig signingConfigs.sign
             minifyEnabled true
             shrinkResources true
             //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),'proguard-rules.pro'
